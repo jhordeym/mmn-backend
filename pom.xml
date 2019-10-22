@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.mmn</groupId>
+	<artifactId>mmn-backend</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>mmn-backend</name>
+	<description>Root pom for mmn-project</description>
+
+	<modules>
+		<module>core-config</module>
+		<module>core-registry</module>
+		<module>core-gateway</module>
+		<module>core-auth</module>
+		<module>business-account-service</module>
+		<module>business-translation-service</module>
+		<module>business-payment-service</module>
+	</modules>
+
+</project>
