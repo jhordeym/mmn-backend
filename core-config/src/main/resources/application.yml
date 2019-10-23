@@ -1,0 +1,16 @@
+server:
+  port: ${MMN_CORE_CONFIG_PORT}
+
+spring:
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/shared
+
+  profiles:
+    active: native
+
+  security:
+    user:
+      password: ${MMN_CORE_CONFIG_PASSWORD}

@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: ${MMN_CORE_REGISTRY_NAME}
+
+  profiles:
+    active: native
+
+  cloud:
+    config:
+      uri: "http://${MMN_CORE_CONFIG_HOST}:${MMN_CORE_CONFIG_PORT}"
+      fail-fast: true
+      username: ${MMN_CORE_CONFIG_USER}
+      password: ${MMN_CORE_CONFIG_PASSWORD}
+
+eureka:
+  instance:
+    prefer-ip-address: true
+
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    server:
+      waitTimeInMsWhenSyncEmpty: 0

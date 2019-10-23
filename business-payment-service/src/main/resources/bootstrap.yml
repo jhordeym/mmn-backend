@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: ${MMN_BUSINESS_PAYMENT_NAME}
+
+  profiles:
+    active: native
+
+  cloud:
+    config:
+      uri: "http://${MMN_CORE_CONFIG_HOST}:${MMN_CORE_CONFIG_PORT}"
+      fail-fast: true
+      username: ${MMN_CORE_CONFIG_USER}
+      password: ${MMN_CORE_CONFIG_PASSWORD}

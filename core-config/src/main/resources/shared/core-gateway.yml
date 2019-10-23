@@ -1,0 +1,46 @@
+server:
+  port: ${MMN_CORE_GATEWAY_PORT}
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20000
+
+ribbon:
+  ReadTimeout: 20000
+  ConnectTimeout: 20000
+
+zuul:
+  ignoredServices: '*'
+  host:
+    connect-timeout-millis: 20000
+    socket-timeout-millis: 20000
+
+  routes:
+    ${MMN_BUSINESS_AUTH_NAME}:
+      path: /${MMN_BUSINESS_AUTH_CONTEXTPATH}/**
+      serviceId: ${MMN_BUSINESS_AUTH_NAME}
+      stripPrefix: false
+      sensitiveHeaders:
+
+    ${MMN_BUSINESS_ACCOUNT_NAME}:
+      path: /${MMN_BUSINESS_ACCOUNT_CONTEXTPATH}/**
+      serviceId: ${MMN_BUSINESS_ACCOUNT_NAME}
+      stripPrefix: false
+      sensitiveHeaders:
+
+    ${MMN_BUSINESS_PAYMENT_NAME}:
+      path: /${MMN_BUSINESS_PAYMENT_CONTEXTPATH}/**
+      serviceId: ${MMN_BUSINESS_PAYMENT_NAME}
+      stripPrefix: false
+      sensitiveHeaders:
+
+    ${MMN_BUSINESS_TRANSLATIONS_NAME}:
+      path: /${MMN_BUSINESS_TRANSLATIONS_CONTEXTPATH}/**
+      serviceId: ${MMN_BUSINESS_TRANSLATIONS_NAME}
+      stripPrefix: false
+      sensitiveHeaders:
+

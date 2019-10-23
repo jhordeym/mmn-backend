@@ -1,0 +1,28 @@
+logging:
+  level:
+    org.springframework.security: INFO
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://${MMN_CORE_REGISTRY_HOST}:${MMN_CORE_REGISTRY_PORT}/${MMN_CORE_REGISTRY_CONTEXTPATH}/
+
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://${MMN_BUSINESS_AUTH_HOST}:${MMN_BUSINESS_AUTH_PORT}/${MMN_BUSINESS_AUTH_CONTEXTPATH}/users/current
+
+spring:
+  output:
+    ansi:
+      enabled: always

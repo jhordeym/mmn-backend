@@ -1,0 +1,26 @@
+### IMPORTANT: THIS FILE SHOULD BE NAMED THE SAME AS : ${MMN_BUSINESS_ACCOUNT_NAME} ###
+
+server:
+  context-path: ${MMN_BUSINESS_ACCOUNT_CONTEXTPATH}
+  port: ${MMN_BUSINESS_ACCOUNT_PORT}
+
+security:
+  oauth2:
+    client:
+      clientId: ${MMN_BUSINESS_ACCOUNT_NAME}
+      clientSecret: ${MMN_BUSINESS_ACCOUNT_PASSWORD}
+
+      accessTokenUri: http://${MMN_BUSINESS_AUTH_HOST}:${MMN_BUSINESS_AUTH_PORT}/${MMN_BUSINESS_AUTH_CONTEXTPATH}/oauth/token
+
+      grant-type: client_credentials
+      scope: server
+
+spring:
+  data:
+    mongodb:
+      # shared database across services (can be improved)
+      host: ${MMN_MONGODB_HOST}
+      port: ${MMN_MONGODB_PORT}
+      username: ${MMN_MONGODB_USER}
+      password: ${MMN_MONGODB_PASSWORD}
+      database: ${MMN_MONGODB_DATABASE}
