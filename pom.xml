@@ -15,7 +15,7 @@
 		<module>core-config</module>
 		<module>core-registry</module>
 		<module>core-gateway</module>
-		<module>core-auth</module>
+		<module>business-auth-service</module>
 		<module>business-account-service</module>
 		<module>business-translation-service</module>
 		<module>business-payment-service</module>
