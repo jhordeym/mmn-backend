@@ -12,3 +12,12 @@ spring:
       username: ${MMN_CORE_CONFIG_USER}
       password: ${MMN_CORE_CONFIG_PASSWORD}
 
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
