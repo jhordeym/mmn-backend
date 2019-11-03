@@ -2,6 +2,7 @@ package com.mmn.account.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mmn.account.type.AccountStatus;
+import lombok.Builder;
 import lombok.Data;
 import org.bson.internal.Base64;
 import org.springframework.data.annotation.Id;
@@ -15,6 +16,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Data
+@Builder
 @Document
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Account {
