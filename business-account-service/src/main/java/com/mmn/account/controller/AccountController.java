@@ -1,42 +1,79 @@
 package com.mmn.account.controller;
 
+import com.mmn.account.dto.LoginDto;
+import com.mmn.account.dto.PassRecoveryDto;
+import com.mmn.account.model.Account;
+import com.mmn.account.service.AccountService;
+import com.mmn.account.type.AccountStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.mmn.account.model.Account;
-import com.mmn.account.service.AccountService;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/accounts")
+@Slf4j
 public class AccountController {
 
-	@Autowired
-	private AccountService accountService;
-	
-	@PostMapping
-	public ResponseEntity<?> save(@RequestBody Account account) {
-		if (accountService.existEmail(account.getEmail())) {
-			return new ResponseEntity<Account>(HttpStatus.CONFLICT);
-		} else {
-			accountService.insert(account, ServletUriComponentsBuilder.fromCurrentRequest());
-		}
-		return new ResponseEntity<Account>(account, HttpStatus.CREATED);
-	}
-	
-	@PostMapping("/confirmation/{id}")
-	public ResponseEntity<?> emailConfirmation(@PathVariable("id") String id) {
-		if (accountService.confirmation(id)) {
-			return new ResponseEntity<String>(HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
+    @Autowired
+    private AccountService accountService;
+
+    @PostMapping
+    public ResponseEntity<Account> save(@RequestBody final Account account,
+                                        // optional (to skip email spam)
+                                        @RequestParam(value = "useMail", defaultValue = "true", required = false) final String enableMail) {
+
+        final Account body = accountService.save(account, ServletUriComponentsBuilder.fromCurrentRequest(), enableMail);
+        log.debug("Account saved successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body(body);
+    }
+
+    @PostMapping("/forgot")
+    public ResponseEntity<String> forgot(@RequestBody final String login) {
+        if (accountService.forgot(login, ServletUriComponentsBuilder.fromCurrentRequest())) {
+            return ResponseEntity.status(HttpStatus.OK).body(AccountStatus.WaitingPasswordRecovery.toString());
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(HttpStatus.NO_CONTENT.toString());
+    }
+
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody final LoginDto loginDto) {
+        final Optional<Account> login = accountService.login(loginDto);
+        if (login.isPresent()) {
+            log.debug("Login successful");
+            return ResponseEntity.status(HttpStatus.OK).body(login.get());
+        }
+        log.debug("Login failed");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HttpStatus.UNAUTHORIZED.toString());
+    }
+
+    public static final String MAIL_CONFIRM_URI = "/confirm";
+    @GetMapping(MAIL_CONFIRM_URI)
+    public ResponseEntity<String> confirmAccount(@RequestParam("id") final String id) {
+        if (accountService.confirmAccount(id)) {
+            log.debug("Account confirmed");
+            return ResponseEntity.status(HttpStatus.OK).body(AccountStatus.Authenticated.toString());
+        }
+        log.debug("Account recovered");
+        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(HttpStatus.EXPECTATION_FAILED.toString());
+    }
+
+    public static final String MAIL_RECOVER_URI = "/recover";
+    @GetMapping("/forgot/" + MAIL_RECOVER_URI)
+    public ResponseEntity<String> recoverAccount(@RequestParam("id") final String id,
+                                                 @RequestParam("token") final String token) {
+        if (accountService.recoverAccount(PassRecoveryDto.builder().id(id).token(token).build())) {
+            log.debug("Account recovered");
+            return ResponseEntity.status(HttpStatus.OK).body(AccountStatus.Recovered.toString());
+        }
+        log.debug("Failed recovering");
+        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(HttpStatus.EXPECTATION_FAILED.toString());
+    }
+
+
 }

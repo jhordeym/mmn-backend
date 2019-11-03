@@ -1,36 +1,69 @@
 package com.mmn.account.model;
 
-import java.time.LocalDate;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.mmn.account.type.AccountStatus;
+import lombok.Data;
+import org.bson.internal.Base64;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.mmn.account.type.AccountStatus;
-
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Data
 @Document
-@Getter @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Account {
+    @Id
+    private String id;
 
-	@Id
-	private String id;
-	private User user;
-	private String email;
-	private String phoheNumber;
-	private String name;
-	private String lastName;
-	private AccountStatus status = AccountStatus.New;
-	private LocalDate accountDate = LocalDate.now();
-	private LocalDate statusDate;
-	
-	public Account confirmated() {
-		setStatus(AccountStatus.Authenticated);
-		setStatusDate(LocalDate.now());
-		return this;
-	}
-	
+    /* Login by either email or phone,
+        but email is mandatory! */
+    @Indexed(unique = true, sparse = true)
+    private String email;
+    @Indexed(unique = true, sparse = true)
+    private String phone;
+
+    private String password;
+    private String resetToken;
+
+    // Additional fields
+    private String name;
+    private String lastName;
+    private Address address;
+
+    @DBRef
+    private List<Role> roles;
+    private AccountStatus accountStatus = AccountStatus.New;
+    private LocalDate creationDate = LocalDate.now();
+    private LocalDate updatedDate;
+
+    public Account confirmed() {
+        setAccountStatus(AccountStatus.Authenticated);
+        setUpdatedDate(LocalDate.now());
+        return this;
+    }
+
+
+    public Account newToken() {
+        if (Objects.isNull(getResetToken()))
+            return this.updateToken();
+        return this;
+    }
+
+    public Account updateToken() {
+        setResetToken(Base64.encode(UUID.randomUUID().toString().getBytes()));
+        return this;
+    }
+
+    public Account hidePassAndToken() {
+        setPassword(null);
+        setResetToken(null);
+        return this;
+    }
+
 }

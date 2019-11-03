@@ -1,71 +1,105 @@
 package com.mmn.account.service;
 
-import java.util.Optional;
-
+import com.mmn.account.dto.LoginDto;
+import com.mmn.account.dto.PassRecoveryDto;
+import com.mmn.account.model.Account;
+import com.mmn.account.repository.AccountRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.mmn.account.dto.AccountMailDto;
-import com.mmn.account.model.Account;
-import com.mmn.account.repository.AccountRepository;
-import com.mmn.account.repository.UserReposiroty;
-import com.mmn.mail.Mail;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
+@Slf4j
 public class AccountService {
 
-	@Autowired
-	private AccountRepository accountRepository;
-	@Autowired
-	private UserReposiroty userReposiroty;
-	@Autowired
-	private JavaMailSender javaMailSender;
+    @Autowired
+    private AccountRepository accountRepository;
+    @Autowired
+    private MailService mailService;
+    @Autowired
+    private PasswordHandler passwordHandler;
 
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
-	public Account insert(Account account, ServletUriComponentsBuilder servletUriComponentsBuilder) {
-		account = accountRepository.save(account);
-		account.getUser().setPassword(
-				enconde(account.getUser().getPassword())
-				);
-		userReposiroty.save(account.getUser());
-		sendMail(
-				new AccountMailDto(
-						account, servletUriComponentsBuilder.path("/confirmation/{0}").buildAndExpand(account.getId()).toUri()
-						)
-				);
-		return account;
-	}
+    public Account save(final Account account,
+                        final ServletUriComponentsBuilder servletUriComponentsBuilder,
+                        final String enableEmail) {
+        final Optional<Account> existingAccount = this.accountRepository.findByEmail(account.getEmail());
+        if (existingAccount.isPresent()) {
+            log.info("Account already exists -> Update...");
+            final Account existingAcc = existingAccount.get();
+            account.setId(existingAcc.getId());
+            handleImportantFields(account, existingAcc);
+        } else {
+            log.info("New account -> Encrypting password and saving...");
+            account.setPassword(passwordHandler.encode(account.getPassword()));
+        }
+        final Account savedAccount = accountRepository.save(account.newToken());
+        if (enableEmail.equals("true")) {
+            this.mailService.sendConfirmationEmail(savedAccount, servletUriComponentsBuilder);
+        }
+        return savedAccount.hidePassAndToken();
+    }
 
-	private String enconde(String password) {
-//		return bCryptPasswordEncoder.encode(password);
-		return password;
-	}
+    private void handleImportantFields(final Account newAcc, final Account existingAcc) {
+        // Mandatory Non Null Fields
+        if (Objects.isNull(newAcc.getPhone())) {
+            newAcc.setPhone(existingAcc.getPhone());
+        }
+        if (Objects.isNull(newAcc.getResetToken()) && Objects.nonNull(existingAcc.getResetToken())) {
+            newAcc.setResetToken(existingAcc.getResetToken());
+        }
+        if (this.passwordHandler.match(newAcc.getPassword(), existingAcc.getPassword())) {
+            log.info("... -> Keeping the same password...");
+            newAcc.setPassword(existingAcc.getPassword());
+        } else {
+            log.info("... -> Updating password as well...");
+            newAcc.setPassword(passwordHandler.encode(newAcc.getPassword()));
+        }
+    }
 
-	public boolean existEmail(String email) {
-		return accountRepository.existsByEmail(email);
-	}
 
-	public boolean confirmation(String id) {
-		Optional<Account> optional = accountRepository.findById(id);
-		if (optional.isPresent()) {
-			accountRepository.save(
-					optional.get().confirmated()
-					);
-			return true;
-		}
-		return false;
-	}
 
-	public void sendMail(Mail mail) {
-		SimpleMailMessage message = new SimpleMailMessage();
-        message.setText(mail.getText());
-        message.setTo(mail.getEmail());
-        javaMailSender.send(message);
-	}
+    public Optional<Account> login(final LoginDto loginDto) {
+        final Optional<Account> existingAccount = this.accountRepository.findByEmailOrPhone(loginDto.getLogin(), loginDto.getLogin());
+        if (existingAccount.isPresent()) {
+            final Account acc = existingAccount.get();
+            if (this.passwordHandler.match(loginDto.getPassword(), acc.getPassword()))
+                return Optional.of(acc.hidePassAndToken());
+        }
+        return Optional.empty();
+    }
+
+    public boolean forgot(final String login,
+                          final ServletUriComponentsBuilder servletUriComponentsBuilder) {
+        final Optional<Account> existingAccount = this.accountRepository.findByEmailOrPhone(login, login);
+        if (existingAccount.isPresent()) {
+            this.mailService.sendRecoveryEmail(existingAccount.get(), servletUriComponentsBuilder);
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean confirmAccount(final String id) {
+        final Optional<Account> existingAccount = this.accountRepository.findById(id);
+        if (existingAccount.isPresent()) {
+            accountRepository.save(existingAccount.get().confirmed());
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean recoverAccount(final PassRecoveryDto passRecoveryDto) {
+        final Optional<Account> existingAccount = this.accountRepository.findByIdAndResetToken(passRecoveryDto.getId(), passRecoveryDto.getToken());
+        if (existingAccount.isPresent()) {
+            this.accountRepository.save(existingAccount.get().updateToken());
+            return true;
+        }
+        return false;
+    }
 
 }
