@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -37,6 +38,7 @@ public class Account {
     private String name;
     private String lastName;
     private Address address;
+    private Date birthDate;
 
     @DBRef
     private List<Role> roles;

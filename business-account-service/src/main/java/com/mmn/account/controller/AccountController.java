@@ -15,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/accounts")
 @Slf4j
 public class AccountController {
