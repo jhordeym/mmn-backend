@@ -2,9 +2,9 @@ package com.mmn.account.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mmn.account.type.AccountStatus;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import lombok.Builder;
 import lombok.Data;
-import org.bson.internal.Base64;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -26,9 +26,7 @@ public class Account {
 
     /* Login by either email or phone,
         but email is mandatory! */
-    @Indexed(unique = true, sparse = true)
     private String email;
-    @Indexed(unique = true, sparse = true)
     private String phone;
 
     private String password;

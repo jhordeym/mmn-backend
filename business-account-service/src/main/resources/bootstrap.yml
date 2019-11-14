@@ -13,10 +13,10 @@ spring:
 
   mail:
     default-encoding: UTF-8
-    host: smtp.gmail.com
-    username: jhmailbot
-    password: zjdfzgvnvheppctb
-    port: 587
+    host: travined.com
+    username: noreply@travined.com
+    password: TSz&h~R%a?80
+    port: 465
     properties:
       mail:
         smtp:
@@ -27,3 +27,9 @@ spring:
     test-connection: false
   
 logging.level.org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+
+
+app.payment:
+  clientId: "AZ2PlyKhOutjEaMwiRWfhWDV0riPkLbFS6m9XKPF-XV1QtUjkitkbv0RiHMrB5n1XQjpX0sUApulMuwb"
+  clientSecret: "EADrmy6pdR_D5a_Ar9VYu2bDJZW78Ft0X912hlm_nQ9edqdO_7W6wrt6rgzECQHAfx4yhH3eRCA9rg6y"
+  feign.url: "https://api.sandbox.paypal.com/v1/"

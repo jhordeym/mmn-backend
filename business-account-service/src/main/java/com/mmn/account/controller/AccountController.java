@@ -3,6 +3,7 @@ package com.mmn.account.controller;
 import com.mmn.account.dto.LoginDto;
 import com.mmn.account.dto.PassRecoveryDto;
 import com.mmn.account.model.Account;
+import com.mmn.account.model.Level;
 import com.mmn.account.service.AccountService;
 import com.mmn.account.type.AccountStatus;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,12 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
 
+    @PostMapping("/change-pass")
+    public ResponseEntity<Account> changePassword(@RequestBody final Account account) {
+        // TODO: create service to changepassword
+        return null;
+    }
+
     @PostMapping("/forgot")
     public ResponseEntity<String> forgot(@RequestBody final String login) {
         if (accountService.forgot(login, ServletUriComponentsBuilder.fromCurrentRequest())) {
@@ -41,6 +48,19 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(HttpStatus.NO_CONTENT.toString());
     }
 
+    // Already got the mail
+    @PostMapping("/referal")
+    public Level validateReferralCode(@RequestParam String levelId) {
+        // TODO validate level, modify status and return level validated.
+        return null;
+    }
+
+    // send email to invite new commers
+    @PostMapping("/invite")
+    public String validateReferralCode(@RequestParam Level level) {
+        // TODO persist level and send email
+        return null;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody final LoginDto loginDto) {
@@ -75,6 +95,7 @@ public class AccountController {
         log.debug("Failed recovering");
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(HttpStatus.EXPECTATION_FAILED.toString());
     }
+
 
 
 }
