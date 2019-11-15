@@ -1,34 +1,37 @@
 package com.mmn.account.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.mmn.account.type.AccountStatus;
-import lombok.Builder;
-import lombok.Data;
-import org.bson.internal.Base64;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.mmn.account.type.AccountStatus;
+
+import lombok.Builder;
+import lombok.Data;
+
 @Data
 @Builder
-@Document
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Entity
 public class Account {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private String id;
 
     /* Login by either email or phone,
         but email is mandatory! */
-    @Indexed(unique = true, sparse = true)
     private String email;
-    @Indexed(unique = true, sparse = true)
     private String phone;
 
     private String password;
@@ -37,10 +40,11 @@ public class Account {
     // Additional fields
     private String name;
     private String lastName;
+    @Embedded
     private Address address;
     private Date birthDate;
 
-    @DBRef
+    @OneToMany
     private List<Role> roles;
     private AccountStatus accountStatus = AccountStatus.New;
     private LocalDate creationDate = LocalDate.now();
@@ -60,11 +64,16 @@ public class Account {
     }
 
     public Account updateToken() {
-        setResetToken(Base64.encode(UUID.randomUUID().toString().getBytes()));
+        setResetToken(
+        		Base64.getEncoder().encodeToString(
+        				UUID.randomUUID().toString().getBytes()
+        				)
+        		);
         return this;
     }
 
-    public Account hidePassAndToken() {
+
+	public Account hidePassAndToken() {
         setPassword(null);
         setResetToken(null);
         return this;

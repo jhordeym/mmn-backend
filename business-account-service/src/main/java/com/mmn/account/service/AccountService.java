@@ -22,6 +22,7 @@ public class AccountService {
     private MailService mailService;
     @Autowired
     private PasswordHandler passwordHandler;
+    // TODO: create level service
 
     public Account save(final Account account,
                         final ServletUriComponentsBuilder servletUriComponentsBuilder,
