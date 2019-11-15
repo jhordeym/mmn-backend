@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.mmn.account.type.PaymentType;
+import com.mmn.account.type.ShoppingType;
 
 import lombok.Builder;
 import lombok.Data;
@@ -32,5 +32,8 @@ public class ShoppingCart {
     @OneToMany(targetEntity=CartProduct.class, mappedBy="shoppingCart")
     private List<CartProduct> products;
     private LocalDate creationDate;
-    private PaymentType paymentType;
+    @ManyToOne
+    private Payment payment;
+	private ShoppingType shoppingType;
+
 }

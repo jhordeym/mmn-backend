@@ -1,6 +1,6 @@
 package com.mmn.account.type;
 
-public enum PaymentType {
+public enum ShoppingType {
     Product,
     Subscription
 }
