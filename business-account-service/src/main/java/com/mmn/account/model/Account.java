@@ -17,11 +17,11 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mmn.account.type.AccountStatus;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 public class Account {

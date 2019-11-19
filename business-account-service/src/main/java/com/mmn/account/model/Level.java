@@ -14,11 +14,11 @@ import org.hibernate.annotations.GenericGenerator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mmn.account.type.LevelStatus;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@NoArgsConstructor
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Level {
@@ -36,7 +36,13 @@ public class Level {
     @ManyToOne
     @JoinColumn(name="CHILD_ID")
     private Account child;
-    private LevelStatus status;
+    private LevelStatus status = LevelStatus.Inactive;
     private Integer score;
     private LocalDate activeDate;
+    private String emailInvited;//same email account child.email
+    
+    public boolean isActive() {
+    	return this.score.equals(LevelStatus.Active);
+    }
+    
 }

@@ -1,16 +1,25 @@
 package com.mmn.account.service;
 
+import com.mmn.account.dto.InviteDto;
 import com.mmn.account.dto.LoginDto;
+import com.mmn.account.dto.MailDto;
 import com.mmn.account.dto.PassRecoveryDto;
+import com.mmn.account.exceptions.EmailInvitedAcitiveException;
 import com.mmn.account.model.Account;
+import com.mmn.account.model.Level;
 import com.mmn.account.repository.AccountRepository;
+import com.mmn.account.repository.LevelRepository;
+import com.mmn.account.type.LevelStatus;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -22,7 +31,8 @@ public class AccountService {
     private MailService mailService;
     @Autowired
     private PasswordHandler passwordHandler;
-    // TODO: create level service
+    @Autowired
+    private LevelRepository levelRepository;
 
     public Account save(final Account account,
                         final ServletUriComponentsBuilder servletUriComponentsBuilder,
@@ -102,5 +112,44 @@ public class AccountService {
         }
         return false;
     }
+
+	public Level invite(InviteDto invite) {
+		Optional<Level> optional = levelRepository.findByEmailInvitedAndStatus(invite.getEmailInvited(), LevelStatus.Active);
+		if (optional.isPresent()) {
+			throw new EmailInvitedAcitiveException();
+		} 
+		//cria quantos niveis forem emitidos, enquanto não ativar um convite específico
+		Level level = new Level();				
+		level.setParent(invite.getAccount());
+		level.setEmailInvited(invite.getEmailInvited());
+		level = levelRepository.save(level);
+		mailService.sendMail(
+				MailDto.builder().email(
+						invite.getEmailInvited()
+						).text(
+								invite.getLink() + "/" + level.getId().toString()
+								).build()
+				);
+		return level;
+	}
+
+	public Level validateReferralCode(InviteDto inviteDto) {
+		Optional<Level> optional = levelRepository.findById(
+				UUID.fromString(inviteDto.getId())
+				);
+		if (optional.isPresent() && optional.get().isActive()) {
+			throw new EmailInvitedAcitiveException();
+		}
+		Level level = optional.get();
+		level.setActiveDate(LocalDate.now());
+		level.setStatus(LevelStatus.Active);
+		level.setScore(scoreValidateInvite());
+		return levelRepository.save(level);
+	}
+
+	private Integer scoreValidateInvite() {
+		// TODO Auto-generated method stub
+		return 1;
+	}
 
 }

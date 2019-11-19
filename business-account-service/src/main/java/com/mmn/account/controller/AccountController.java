@@ -1,5 +1,6 @@
 package com.mmn.account.controller;
 
+import com.mmn.account.dto.InviteDto;
 import com.mmn.account.dto.LoginDto;
 import com.mmn.account.dto.PassRecoveryDto;
 import com.mmn.account.model.Account;
@@ -50,18 +51,24 @@ public class AccountController {
 
     // Already got the mail
     @PostMapping("/referal")
-    public Level validateReferralCode(@RequestParam String levelId) {
-        // TODO validate level, modify status and return level validated.
-        return null;
+    public Level validateReferralCode(@RequestBody InviteDto inviteDto) {
+        try {
+			return accountService.validateReferralCode(inviteDto);
+		} catch (Exception e) {
+			return null;
+		}
     }
 
     // send email to invite new commers
     @PostMapping("/invite")
-    public String validateReferralCode(@RequestParam Level level) {
-        // TODO persist level and send email
-        return null;
+    public Level invite(@RequestBody InviteDto invite) {
+        try {
+			return accountService.invite(invite);
+		} catch (Exception e) {
+			return null;
+		}
     }
-
+    
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody final LoginDto loginDto) {
         final Optional<Account> login = accountService.login(loginDto);
