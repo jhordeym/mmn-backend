@@ -1,9 +1,8 @@
 package com.mmn.account.controller;
 
+import com.mmn.account.model.ShoppingCart;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import com.mmn.account.model.ShoppingCart;
 
 @RestController
 @CrossOrigin("*")

@@ -1,27 +1,29 @@
 package com.mmn.account.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-import lombok.Data;
-
-@Data
 @Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CartProduct {
-
-	@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private String id;
-	@ManyToOne
-	private Product product;
-	@ManyToOne
-	private ShoppingCart shoppingCart;
-	private BigDecimal quantity = BigDecimal.ONE;
-	private BigDecimal price;
-	private BigDecimal discount;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
+    @ManyToOne
+    private Product product;
+    @ManyToOne
+    private ShoppingCart shoppingCart;
+    private BigDecimal quantity = BigDecimal.ONE;
+    private BigDecimal price;
+    private BigDecimal discount;
 }

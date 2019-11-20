@@ -1,2 +1,2 @@
 server:
-  port: ${MMN_CORE_REGISTRY_PORT}
+  port: ${MMN_CORE_REGISTRY_PORT:8082}

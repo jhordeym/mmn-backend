@@ -1,48 +1,45 @@
 package com.mmn.account.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.mmn.account.type.LevelStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.GenericGenerator;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.mmn.account.type.LevelStatus;
-
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
 @Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Level {
     // Id will be used for the invite of child
     @Id
-    @GeneratedValue(generator="UUID")
+    @GeneratedValue(generator = "UUID")
     @GenericGenerator(
-    		name="UUID",
-    		strategy="org.hibernate.id.UUIDGenerator"
-    		)
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     private UUID id;
     @ManyToOne
-    @JoinColumn(name="PARENT_ID")
+    @JoinColumn(name = "PARENT_ID")
     private Account parent;
     @ManyToOne
-    @JoinColumn(name="CHILD_ID")
+    @JoinColumn(name = "CHILD_ID")
     private Account child;
     private LevelStatus status = LevelStatus.Inactive;
     private Integer score;
     private LocalDate activeDate;
-    private String emailInvited;//same email account child.email
-    
+    private String emailInvited;//same to account child.to
+
     public boolean isActive() {
-    	return this.score.equals(LevelStatus.Active);
+        return this.score.equals(LevelStatus.Active);
     }
-    
+
 }

@@ -1,5 +1,6 @@
 package com.mmn.account;
 
+/*
 import com.mmn.account.config.MongoTestConfiguration;
 import com.mmn.account.model.Account;
 import com.mmn.account.repository.AccountRepository;
@@ -70,3 +71,4 @@ public class MongoDbSpringIntegrationTest {
         assertThat(byEmail.get()).isNotEqualTo(NOT_EXPECTED);
     }
 }
+*/

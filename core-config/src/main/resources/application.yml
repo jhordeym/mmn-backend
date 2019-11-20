@@ -1,5 +1,5 @@
 server:
-  port: ${MMN_CORE_CONFIG_PORT}
+  port: ${MMN_CORE_CONFIG_PORT:8081}
 
 spring:
   cloud:
@@ -7,10 +7,20 @@ spring:
       server:
         native:
           search-locations: classpath:/shared
+        # Use Git instead
+        #git:
+        #  uri: https://gitlab.com/mmn-project/mmn-config-server-repo.git
+        #  username: ${GIT_USERNAME}
+        #  password: ${GIT_PASSWORD}
+
+        #  skipSslValidation: true
+        #  force-pull: true
+        #  cloneOnStart: true
+
 
   profiles:
     active: native
 
   security:
     user:
-      password: ${MMN_CORE_CONFIG_PASSWORD}
+      password: ${MMN_CORE_CONFIG_PASSWORD:Password1234}

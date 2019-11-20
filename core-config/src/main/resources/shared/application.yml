@@ -2,25 +2,25 @@ logging:
   level:
     org.springframework.security: INFO
 
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 10000
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 10000
 
 eureka:
   instance:
     prefer-ip-address: true
   client:
     serviceUrl:
-      defaultZone: http://${MMN_CORE_REGISTRY_HOST}:${MMN_CORE_REGISTRY_PORT}/${MMN_CORE_REGISTRY_CONTEXTPATH}/
+      defaultZone: http://${MMN_CORE_REGISTRY_HOST:localhost}:${MMN_CORE_REGISTRY_PORT:8082}/${MMN_CORE_REGISTRY_CONTEXTPATH:eureka}/
 
-security:
-  oauth2:
-    resource:
-      user-info-uri: http://${MMN_BUSINESS_AUTH_HOST}:${MMN_BUSINESS_AUTH_PORT}/${MMN_BUSINESS_AUTH_CONTEXTPATH}/users/current
+#security:
+#  oauth2:
+#    resource:
+#      user-info-uri: http://${MMN_BUSINESS_AUTH_HOST:localhost}:${MMN_BUSINESS_AUTH_PORT:8180}/${MMN_BUSINESS_AUTH_CONTEXTPATH:uaa}/users/current
 
 spring:
   output:

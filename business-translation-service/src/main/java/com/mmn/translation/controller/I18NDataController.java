@@ -1,22 +1,16 @@
 package com.mmn.translation.controller;
 
-import java.util.List;
-
 import com.mmn.translation.dto.I18NDto;
 import com.mmn.translation.model.I18NData;
 import com.mmn.translation.service.I18NDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("lang")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class I18NDataController {
@@ -54,7 +48,7 @@ public class I18NDataController {
 
     @DeleteMapping("/many")
     @ResponseBody
-    public List<String> deleteAll(@RequestBody final I18NDto dto) {
+    public List<String> deleteMany(@RequestBody final I18NDto dto) {
         return this.service.deleteMany(dto);
     }
 }

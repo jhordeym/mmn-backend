@@ -1,26 +1,26 @@
 ### IMPORTANT: THIS FILE SHOULD BE NAMED THE SAME AS : ${MMN_BUSINESS_PAYMENT_NAME} ###
 
 server:
-  context-path: ${MMN_BUSINESS_PAYMENT_CONTEXTPATH}
-  port: ${MMN_BUSINESS_PAYMENT_PORT}
+#  context-path: ${MMN_BUSINESS_PAYMENT_CONTEXTPATH:payments}
+  port: ${MMN_BUSINESS_PAYMENT_PORT:8182}
 
-security:
-  oauth2:
-    client:
-      clientId: ${MMN_BUSINESS_PAYMENT_NAME}
-      clientSecret: ${MMN_BUSINESS_PAYMENT_PASSWORD}
+#security:
+#  oauth2:
+#    client:
+#      clientId: ${MMN_BUSINESS_AUTH_NAME:business-auth-service}
+#      clientSecret: ${MMN_BUSINESS_AUTH_PASSWORD:Password1234}
+#
+#      accessTokenUri: http://${MMN_BUSINESS_AUTH_HOST:localhost}:${MMN_BUSINESS_AUTH_PORT:8180}/${MMN_BUSINESS_AUTH_CONTEXTPATH:uaa}/oauth/token
+#
+#      grant-type: client_credentials
+#      scope: server
 
-      accessTokenUri: http://${MMN_BUSINESS_AUTH_HOST}:${MMN_BUSINESS_AUTH_PORT}/${MMN_BUSINESS_AUTH_CONTEXTPATH}/oauth/token
-
-      grant-type: client_credentials
-      scope: server
-
-spring:
-  data:
-    mongodb:
-      # shared database across services (can be improved)
-      host: ${MMN_MONGODB_HOST}
-      port: ${MMN_MONGODB_PORT}
-      username: ${MMN_MONGODB_USER}
-      password: ${MMN_MONGODB_PASSWORD}
-      database: ${MMN_MONGODB_DATABASE}
+#spring:
+#  data:
+#    mongodb:
+#      # shared database across services (can be improved)
+#      host: ${MMN_MONGODB_HOST:localhost}
+#      port: ${MMN_MONGODB_PORT:27017}
+#      username: ${MMN_MONGODB_USER:user}
+#      password: ${MMN_MONGODB_PASSWORD:Password1234}
+#      database: ${MMN_MONGODB_DATABASE:mmn}

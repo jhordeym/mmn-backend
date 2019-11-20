@@ -1,5 +1,5 @@
 server:
-  port: ${MMN_CORE_GATEWAY_PORT}
+  port: ${MMN_CORE_GATEWAY_PORT:8080}
 
 hystrix:
   command:
@@ -7,11 +7,21 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 20000
+            timeoutInMilliseconds: 40000
 
 ribbon:
-  ReadTimeout: 20000
-  ConnectTimeout: 20000
+  readTimeout: 20000
+  connectTimeout: 20000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+eureka:
+  client:
+    fetchRegistry: true
 
 zuul:
   ignoredServices: '*'
@@ -20,27 +30,33 @@ zuul:
     socket-timeout-millis: 20000
 
   routes:
-    ${MMN_BUSINESS_AUTH_NAME}:
-      path: /${MMN_BUSINESS_AUTH_CONTEXTPATH}/**
-      serviceId: ${MMN_BUSINESS_AUTH_NAME}
+    ${MMN_BUSINESS_AUTH_NAME:business-auth-service}:
+      #path: /${MMN_BUSINESS_AUTH_CONTEXTPATH:uaa}/**
+      path: /**
+      serviceId: ${MMN_BUSINESS_AUTH_NAME:business-auth-service}
       stripPrefix: false
-      sensitiveHeaders:
 
-    ${MMN_BUSINESS_ACCOUNT_NAME}:
-      path: /${MMN_BUSINESS_ACCOUNT_CONTEXTPATH}/**
-      serviceId: ${MMN_BUSINESS_ACCOUNT_NAME}
+    ${MMN_BUSINESS_ACCOUNT_NAME:business-account-service}:
+      #path: /${MMN_BUSINESS_ACCOUNT_CONTEXTPATH:accounts}/**
+      path: /**
+      serviceId: ${MMN_BUSINESS_ACCOUNT_NAME:business-account-service}
       stripPrefix: false
-      sensitiveHeaders:
 
-    ${MMN_BUSINESS_PAYMENT_NAME}:
-      path: /${MMN_BUSINESS_PAYMENT_CONTEXTPATH}/**
-      serviceId: ${MMN_BUSINESS_PAYMENT_NAME}
+    ${MMN_BUSINESS_PAYMENT_NAME:business-payment-service}:
+      #path: /${MMN_BUSINESS_PAYMENT_CONTEXTPATH:payments}/**
+      path: /**
+      serviceId: ${MMN_BUSINESS_PAYMENT_NAME:business-payment-service}
       stripPrefix: false
-      sensitiveHeaders:
 
-    ${MMN_BUSINESS_TRANSLATIONS_NAME}:
-      path: /${MMN_BUSINESS_TRANSLATIONS_CONTEXTPATH}/**
-      serviceId: ${MMN_BUSINESS_TRANSLATIONS_NAME}
+    ${MMN_BUSINESS_TRANSLATION_NAME:business-translation-service}:
+      #path: /${MMN_BUSINESS_TRANSLATION_CONTEXTPATH:translations}/**
+      path: /**
+      serviceId: ${MMN_BUSINESS_TRANSLATION_NAME:business-translation-service}
       stripPrefix: false
-      sensitiveHeaders:
+
+    ${MMN_BUSINESS_MAIL_NAME:business-mail-service}:
+      #path: /${MMN_BUSINESS_TRANSLATION_CONTEXTPATH:translations}/**
+      path: /**
+      serviceId: ${MMN_BUSINESS_MAIL_NAME:business-mail-service}
+      stripPrefix: false
 

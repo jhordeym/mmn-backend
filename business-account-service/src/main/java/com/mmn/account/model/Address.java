@@ -1,15 +1,19 @@
 package com.mmn.account.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 
+@Embeddable
 @Data
 @Builder
-@Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Address {
     private String street;

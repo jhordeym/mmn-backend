@@ -1,15 +1,5 @@
 package com.mmn.translation.service;
 
-import static java.util.stream.Collectors.groupingBy;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.Lists;
 import com.mmn.translation.dto.I18NDto;
 import com.mmn.translation.model.I18NData;
@@ -17,6 +7,12 @@ import com.mmn.translation.repository.I18NDataRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -27,7 +23,7 @@ public class I18NDataService {
 
     public List<I18NDto> allDto() {
         final Map<String, List<I18NData>> groupBy = this.allData().stream().collect(groupingBy(I18NData::getLanguage));
-        return groupBy.entrySet().stream().map( (entry) -> dataList2dto(entry.getKey(), entry.getValue())).collect(Collectors.toList());
+        return groupBy.entrySet().stream().map((entry) -> dataList2dto(entry.getKey(), entry.getValue())).collect(Collectors.toList());
     }
 
     private List<I18NData> allData() {
@@ -104,18 +100,18 @@ public class I18NDataService {
     // Helpers
     private List<I18NData> dto2dataList(final I18NDto i18NDto) {
         return i18NDto.getDictionary().entrySet().stream()
-                      .map(entry -> I18NData.builder()
-                                            .language(i18NDto.getLocale())
-                                            .key(entry.getKey())
-                                            .value(entry.getValue())
-                                            .build())
-                      .collect(Collectors.toList());
+                .map(entry -> I18NData.builder()
+                        .language(i18NDto.getLocale())
+                        .key(entry.getKey())
+                        .value(entry.getValue())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     private I18NDto dataList2dto(final String lang, final List<I18NData> list) {
         return I18NDto.builder()
-                      .locale(lang)
-                      .dictionary(list.stream().collect(Collectors.toMap(I18NData::getKey, I18NData::getValue)))
-                      .build();
+                .locale(lang)
+                .dictionary(list.stream().collect(Collectors.toMap(I18NData::getKey, I18NData::getValue)))
+                .build();
     }
 }

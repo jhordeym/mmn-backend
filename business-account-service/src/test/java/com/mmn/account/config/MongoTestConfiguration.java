@@ -1,5 +1,6 @@
 package com.mmn.account.config;
 
+/*
 import com.mmn.account.repository.AccountRepository;
 import com.mongodb.MongoClientURI;
 import com.mongodb.WriteConcern;
@@ -67,3 +68,4 @@ public class MongoTestConfiguration implements InitializingBean, DisposableBean 
         executable.stop();
     }
 }
+*/

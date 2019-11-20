@@ -22,12 +22,14 @@ import java.util.Optional;
 @Slf4j
 public class AccountController {
 
+    public static final String MAIL_CONFIRM_URI = "/confirm";
+    public static final String MAIL_RECOVER_URI = "/recover";
     @Autowired
     private AccountService accountService;
 
     @PostMapping
     public ResponseEntity<Account> save(@RequestBody final Account account,
-                                        // optional (to skip email spam)
+                                        // optional (to skip to spam)
                                         @RequestParam(value = "useMail", defaultValue = "true", required = false) final String enableMail) {
 
         final Account body = accountService.save(account, ServletUriComponentsBuilder.fromCurrentRequest(), enableMail);
@@ -53,22 +55,22 @@ public class AccountController {
     @PostMapping("/referal")
     public Level validateReferralCode(@RequestBody InviteDto inviteDto) {
         try {
-			return accountService.validateReferralCode(inviteDto);
-		} catch (Exception e) {
-			return null;
-		}
+            return accountService.validateReferralCode(inviteDto);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
-    // send email to invite new commers
+    // send to to invite new commers
     @PostMapping("/invite")
     public Level invite(@RequestBody InviteDto invite) {
         try {
-			return accountService.invite(invite);
-		} catch (Exception e) {
-			return null;
-		}
+            return accountService.invite(invite);
+        } catch (Exception e) {
+            return null;
+        }
     }
-    
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody final LoginDto loginDto) {
         final Optional<Account> login = accountService.login(loginDto);
@@ -80,7 +82,6 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HttpStatus.UNAUTHORIZED.toString());
     }
 
-    public static final String MAIL_CONFIRM_URI = "/confirm";
     @GetMapping(MAIL_CONFIRM_URI)
     public ResponseEntity<String> confirmAccount(@RequestParam("id") final String id) {
         if (accountService.confirmAccount(id)) {
@@ -91,7 +92,6 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(HttpStatus.EXPECTATION_FAILED.toString());
     }
 
-    public static final String MAIL_RECOVER_URI = "/recover";
     @GetMapping("/forgot/" + MAIL_RECOVER_URI)
     public ResponseEntity<String> recoverAccount(@RequestParam("id") final String id,
                                                  @RequestParam("token") final String token) {
@@ -102,7 +102,6 @@ public class AccountController {
         log.debug("Failed recovering");
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(HttpStatus.EXPECTATION_FAILED.toString());
     }
-
 
 
 }

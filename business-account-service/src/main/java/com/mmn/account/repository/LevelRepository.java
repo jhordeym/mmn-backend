@@ -10,5 +10,5 @@ import com.mmn.account.type.LevelStatus;
 
 public interface LevelRepository extends JpaRepository<Level, UUID> {
 
-	Optional<Level> findByEmailInvitedAndStatus(String emailInvited, LevelStatus status);
+	Optional<Level> findByEmailInvitedAndStatus(final String emailInvited, final LevelStatus status);
 }
