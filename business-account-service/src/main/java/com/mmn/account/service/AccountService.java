@@ -1,11 +1,7 @@
 package com.mmn.account.service;
 
-import com.mmn.account.client.EmailClient;
-import com.mmn.account.config.AsyncTaskConfig;
-import com.mmn.account.controller.AccountController;
 import com.mmn.account.dto.InviteDto;
 import com.mmn.account.dto.LoginDto;
-import com.mmn.account.dto.MailDto;
 import com.mmn.account.dto.PassRecoveryDto;
 import com.mmn.account.exceptions.AlreadyActiveEmailInviteException;
 import com.mmn.account.model.Account;
@@ -13,9 +9,9 @@ import com.mmn.account.model.Level;
 import com.mmn.account.repository.AccountRepository;
 import com.mmn.account.repository.LevelRepository;
 import com.mmn.account.type.LevelStatus;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -24,57 +20,14 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
 @Slf4j
+@Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AccountService {
-
-    @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
-    private EmailClient emailClient;
-    @Autowired
-    private PasswordHandler passwordHandler;
-    @Autowired
-    private LevelRepository levelRepository;
-
-    @Async(AsyncTaskConfig.THREAD_POOL_TASK_EXECUTOR)
-    public void sendConfirmationEmail(Account account, ServletUriComponentsBuilder servletUriComponentsBuilder) {
-        log.info("Sending confirmation to...");
-        emailClient.sendEmail(MailDto.builder()
-                .to(account.getEmail())
-                .text(servletUriComponentsBuilder
-                        .path(AccountController.MAIL_CONFIRM_URI)
-                        .queryParam("id", account.getId())
-                        .build()
-                        .toUri().toString())
-                .build());
-    }
-
-    @Async(AsyncTaskConfig.THREAD_POOL_TASK_EXECUTOR)
-    public void sendRecoveryEmail(Account account, ServletUriComponentsBuilder servletUriComponentsBuilder) {
-        log.info("Sending recovery to...");
-        emailClient.sendEmail(
-                MailDto.builder()
-                        .to(account.getEmail())
-                        .text(servletUriComponentsBuilder
-                                .path(AccountController.MAIL_RECOVER_URI)
-                                .queryParam("id", account.getId())
-                                .queryParam("token", account.getResetToken())
-                                .build()
-                                .toUri().toString())
-                        .build());
-    }
-
-    @Async(AsyncTaskConfig.THREAD_POOL_TASK_EXECUTOR)
-    public void sendInviteEmail(InviteDto invite, Level level) {
-        log.info("Sending invite to...");
-        emailClient.sendEmail(
-                MailDto.builder()
-                        .to(invite.getEmailInvited())
-                        .text(invite.getLink() + "/" + level.getId().toString())
-                        .build()
-        );
-    }
+    private final AccountRepository accountRepository;
+    private final AccountEmailService accountEmailService;
+    private final PasswordHandler passwordHandler;
+    private final LevelRepository levelRepository;
 
     public Account save(final Account account,
                         final ServletUriComponentsBuilder servletUriComponentsBuilder,
@@ -91,7 +44,7 @@ public class AccountService {
         }
         final Account savedAccount = accountRepository.save(account.newToken());
         if (enableEmail.equals("true")) {
-            sendConfirmationEmail(savedAccount, servletUriComponentsBuilder);
+            accountEmailService.sendConfirmationEmail(savedAccount, servletUriComponentsBuilder);
         }
         return savedAccount.hidePassAndToken();
     }
@@ -128,7 +81,7 @@ public class AccountService {
                           final ServletUriComponentsBuilder servletUriComponentsBuilder) {
         final Optional<Account> existingAccount = this.accountRepository.findByEmailOrPhone(login, login);
         if (existingAccount.isPresent()) {
-            sendRecoveryEmail(existingAccount.get(), servletUriComponentsBuilder);
+            accountEmailService.sendRecoveryEmail(existingAccount.get(), servletUriComponentsBuilder);
             return true;
         }
         return false;
@@ -154,28 +107,28 @@ public class AccountService {
         return false;
     }
 
-    public Level invite(InviteDto invite) {
-        Optional<Level> optional = levelRepository.findByEmailInvitedAndStatus(invite.getEmailInvited(), LevelStatus.Active);
+    public Level invite(final InviteDto invite) {
+        final Optional<Level> optional = levelRepository.findByEmailInvitedAndStatus(invite.getEmailInvited(), LevelStatus.Active);
         if (optional.isPresent()) {
             throw new AlreadyActiveEmailInviteException();
         }
         //cria quantos niveis forem emitidos, enquanto não ativar um convite específico
-        Level level = new Level();
+        final Level level = new Level();
         level.setParent(invite.getAccount());
         level.setEmailInvited(invite.getEmailInvited());
-        level = levelRepository.save(level);
-        sendInviteEmail(invite, level);
-        return level;
+        final Level savedLevel = levelRepository.save(level);
+        accountEmailService.sendInviteEmail(invite, savedLevel);
+        return savedLevel;
     }
 
-    public Level validateReferralCode(InviteDto inviteDto) {
-        Optional<Level> optional = levelRepository.findById(
+    public Level validateReferralCode(final InviteDto inviteDto) {
+        final Optional<Level> optional = levelRepository.findById(
                 UUID.fromString(inviteDto.getId())
         );
         if (optional.isPresent() && optional.get().isActive()) {
             throw new AlreadyActiveEmailInviteException();
         }
-        Level level = optional.get();
+        final Level level = optional.get();
         level.setActiveDate(LocalDate.now());
         level.setStatus(LevelStatus.Active);
         level.setScore(scoreValidateInvite());

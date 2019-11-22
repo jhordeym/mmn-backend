@@ -1,4 +1,4 @@
-package com.mmn.mail.dto;
+package com.mmn.mail.api.dto;
 
 import lombok.Builder;
 import lombok.Data;

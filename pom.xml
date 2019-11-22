@@ -15,11 +15,11 @@
 		<module>core-config</module>
 		<module>core-registry</module>
 		<module>core-gateway</module>
-		<module>business-auth-service</module>
+		<!--<module>business-auth-service</module>-->
 		<module>business-mail-service</module>
-		<module>business-account-service</module>
 		<module>business-translation-service</module>
-		<module>business-payment-service</module>
+		<module>business-account-service</module>
+		<!--<module>business-payment-service</module>-->
 	</modules>
 
 </project>

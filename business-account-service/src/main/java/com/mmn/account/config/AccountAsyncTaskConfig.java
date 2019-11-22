@@ -8,10 +8,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
 @EnableAsync
-public class AsyncTaskConfig {
+public class AccountAsyncTaskConfig {
 
-    public static final String THREAD_POOL_TASK_EXECUTOR = "threadPoolTaskExecutor";
-    private static final String THREAD_NAME_PREFIX = "Async-";
+    public static final String THREAD_POOL_TASK_EXECUTOR = "AccountThreadPoolTaskExecutor";
+    private static final String THREAD_NAME_PREFIX = "AccountAsync-";
 
     @Bean(THREAD_POOL_TASK_EXECUTOR)
     public TaskExecutor getAsyncExecutor() {
