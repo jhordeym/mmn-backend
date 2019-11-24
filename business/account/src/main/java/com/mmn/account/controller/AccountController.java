@@ -1,12 +1,12 @@
 package com.mmn.account.controller;
 
-import com.mmn.account.dto.InviteDto;
-import com.mmn.account.dto.LoginDto;
-import com.mmn.account.dto.PassRecoveryDto;
-import com.mmn.account.model.Account;
-import com.mmn.account.model.Level;
+import com.mmn.account.model.dto.InviteDto;
+import com.mmn.account.model.dto.LoginDto;
+import com.mmn.account.model.dto.PassRecoveryDto;
+import com.mmn.account.model.entity.Account;
+import com.mmn.account.model.entity.Level;
+import com.mmn.account.model.type.AccountStatus;
 import com.mmn.account.service.AccountService;
-import com.mmn.account.type.AccountStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

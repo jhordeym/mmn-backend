@@ -16,6 +16,25 @@ server.port: 0
 #      grant-type: client_credentials
 #      scope: server
 
+# USING POSTGRESQL
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: developer
+    password: Password1234
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: payment
+        ddl-auto: update
+        hbm2ddl.auto: update
+
+app.payment:
+  clientId: "${MMN_PAYMENT_CLIENT_ID}"
+  clientSecret: "${MMN_PAYMENT_CLIENT_SECRET}"
+
 #spring:
 #  data:
 #    mongodb:

@@ -1,14 +1,14 @@
 package com.mmn.account.service;
 
-import com.mmn.account.dto.InviteDto;
-import com.mmn.account.dto.LoginDto;
-import com.mmn.account.dto.PassRecoveryDto;
 import com.mmn.account.exceptions.AlreadyActiveEmailInviteException;
-import com.mmn.account.model.Account;
-import com.mmn.account.model.Level;
+import com.mmn.account.model.dto.InviteDto;
+import com.mmn.account.model.dto.LoginDto;
+import com.mmn.account.model.dto.PassRecoveryDto;
+import com.mmn.account.model.entity.Account;
+import com.mmn.account.model.entity.Level;
+import com.mmn.account.model.type.LevelStatus;
 import com.mmn.account.repository.AccountRepository;
 import com.mmn.account.repository.LevelRepository;
-import com.mmn.account.type.LevelStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -88,7 +89,7 @@ public class AccountService {
 
 
     public boolean confirmAccount(final String id) {
-        final Optional<Account> existingAccount = this.accountRepository.findById(id);
+        final Optional<Account> existingAccount = this.accountRepository.findById(UUID.fromString(id));
         if (existingAccount.isPresent()) {
             accountRepository.save(existingAccount.get().confirmed());
             return true;
@@ -122,7 +123,7 @@ public class AccountService {
 
     public Level validateReferralCode(final InviteDto inviteDto) {
         final Optional<Level> optional = levelRepository.findById(
-                inviteDto.getId()
+                UUID.fromString(inviteDto.getId())
         );
         if (optional.isPresent() && optional.get().isActive()) {
             throw new AlreadyActiveEmailInviteException();
