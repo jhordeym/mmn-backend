@@ -1,0 +1,19 @@
+### IMPORTANT: THIS FILE SHOULD BE NAMED THE SAME AS : ${MMN_BUSINESS_AUTH_NAME} ###
+
+#server:
+#  context-path: ${MMN_BUSINESS_AUTH_CONTEXTPATH:uaa}
+#  port: ${MMN_BUSINESS_AUTH_PORT:8180}
+server.port: 0
+
+#security:
+#  oauth2:
+#    client:
+#      clientId: ${MMN_BUSINESS_AUTH_NAME:business-auth-service}
+#      clientSecret: ${MMN_BUSINESS_AUTH_PASSWORD:Password1234}
+#
+#      accessTokenUri: http://${MMN_BUSINESS_AUTH_HOST:localhost}:${MMN_BUSINESS_AUTH_PORT:8180}/${MMN_BUSINESS_AUTH_CONTEXTPATH:uaa}/oauth/token
+#
+#      grant-type: client_credentials
+#      scope: server
+
+

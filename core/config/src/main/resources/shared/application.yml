@@ -1,0 +1,33 @@
+logging:
+  level:
+    org.springframework.security: INFO
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+feign:
+  client.config.default.loggerLevel: full
+  hystrix.enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${MMN_CORE_REGISTRY_HOST:localhost}:${MMN_CORE_REGISTRY_PORT:8082}/${MMN_CORE_REGISTRY_CONTEXTPATH:eureka}/
+
+#security:
+#  oauth2:
+#    resource:
+#      user-info-uri: http://${MMN_BUSINESS_AUTH_HOST:localhost}:${MMN_BUSINESS_AUTH_PORT:8180}/${MMN_BUSINESS_AUTH_CONTEXTPATH:uaa}/users/current
