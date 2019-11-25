@@ -1,9 +1,10 @@
-### IMPORTANT: THIS FILE SHOULD BE NAMED THE SAME AS : ${MMN_BUSINESS_ACCOUNT_NAME} ###
-
-#server:
-#  context-path: ${MMN_BUSINESS_ACCOUNT_CONTEXTPATH:accounts}
-#  port: ${MMN_BUSINESS_ACCOUNT_PORT:8181}
+# RANDOM PORT
 server.port: 0
+
+info.app:
+  name: Travined - Account Service
+  description: Spring boot application
+  version: 1.0.0
 
 #security:
 #  oauth2:
@@ -15,52 +16,3 @@ server.port: 0
 #
 #      grant-type: client_credentials
 #      scope: server
-
-#spring:
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:mem:application;DB_CLOSE_ON_EXIT=FALSE
-#    username: sa
-#    password: sa
-#  jpa:
-#    show-sql: false
-#    database: H2
-#    properties:
-#      hibernate:
-#      ddl-auto: update
-#      hbm2ddl.auto: update
-#  h2:
-#    console:
-#      enabled: true
-
-
-
-# USING POSTGRESQL
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: developer
-    password: Password1234
-  jpa:
-    show-sql: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        default_schema: account
-        ddl-auto: update
-        hbm2ddl.auto: update
-
-app.payment:
-  clientId: "${MMN_PAYMENT_CLIENT_ID}"
-  clientSecret: "${MMN_PAYMENT_CLIENT_SECRET}"
-  feign.url: "https://api.sandbox.paypal.com/v1/"
-
-#spring:
-#  data:
-#    mongodb:
-#      # shared database across services (can be improved)
-#      host: ${MMN_MONGODB_HOST:localhost}
-#      port: ${MMN_MONGODB_PORT:27017}
-#      username: ${MMN_MONGODB_USER:user}
-#      password: ${MMN_MONGODB_PASSWORD:Password1234}
-#      database: ${MMN_MONGODB_DATABASE:mmn}

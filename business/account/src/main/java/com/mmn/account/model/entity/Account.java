@@ -45,7 +45,9 @@ public class Account {
 
     @OneToMany
     private List<Role> roles;
+    @Builder.Default
     private AccountStatus accountStatus = AccountStatus.New;
+    @Builder.Default
     private LocalDate creationDate = LocalDate.now();
     private LocalDate updatedDate;
 

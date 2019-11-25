@@ -1,5 +1,15 @@
-server:
-  port: ${MMN_CORE_GATEWAY_PORT:8080}
+# REQUIRED PORT
+server.port: ${MMN_CORE_GATEWAY_PORT:8080}
+
+# Actuator/Info
+info.app:
+  name: Travined - Gateway Service
+  description: Spring boot application
+  version: 1.0.0
+
+ribbon:
+  ConnectTimeout: 30000
+  ReadTimeout: 30000
 
 zuul:
   ignoredServices: '*'
@@ -8,29 +18,24 @@ zuul:
     socket-timeout-millis: 600000
   prefix: /api
   routes:
-    #${MMN_BUSINESS_AUTH_NAME:business-auth-service}:
-    #  #path: /${MMN_BUSINESS_AUTH_CONTEXTPATH:uaa}/**
-    #  path: /**
-    #  serviceId: ${MMN_BUSINESS_AUTH_NAME:business-auth-service}
-    #  stripPrefix: false
-
+    # AUTH
+    ${MMN_BUSINESS_AUTH_NAME:business-auth-service}:
+      path: /${MMN_BUSINESS_AUTH_CONTEXTPATH:uaa}/**
+      serviceId: ${MMN_BUSINESS_AUTH_NAME:business-auth-service}
+    # ACCOUNT
     ${MMN_BUSINESS_ACCOUNT_NAME:business-account-service}:
       path: /${MMN_BUSINESS_ACCOUNT_CONTEXTPATH:accounts}/**
-      #path: /**
       serviceId: ${MMN_BUSINESS_ACCOUNT_NAME:business-account-service}
-
+    # PAYMENT
     ${MMN_BUSINESS_PAYMENT_NAME:business-payment-service}:
       path: /${MMN_BUSINESS_PAYMENT_CONTEXTPATH:payments}/**
-      #path: /**
       serviceId: ${MMN_BUSINESS_PAYMENT_NAME:business-payment-service}
-
+    # TRANSLATION
     ${MMN_BUSINESS_TRANSLATION_NAME:business-translation-service}:
       path: /${MMN_BUSINESS_TRANSLATION_CONTEXTPATH:translations}/**
-      #path: /**
       serviceId: ${MMN_BUSINESS_TRANSLATION_NAME:business-translation-service}
-
+    # MAIL
     ${MMN_BUSINESS_MAIL_NAME:business-mail-service}:
       path: /${MMN_BUSINESS_MAIL_CONTEXTPATH:mail}/**
-      #path: /**
       serviceId: ${MMN_BUSINESS_MAIL_NAME:business-mail-service}
 

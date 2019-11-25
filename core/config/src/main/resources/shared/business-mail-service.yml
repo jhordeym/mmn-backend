@@ -1,9 +1,10 @@
-### IMPORTANT: THIS FILE SHOULD BE NAMED THE SAME AS : ${MMN_BUSINESS_MAIL_NAME} ###
-
-#server:
-#  context-path: ${MMN_BUSINESS_MAIL_CONTEXTPATH:mail}
-#  port: ${MMN_BUSINESS_MAIL_PORT:8184}
+# RANDOM PORT
 server.port: 0
+
+info.app:
+  name: Travined - Mail Service
+  description: Spring boot application
+  version: 1.0.0
 
 #security:
 #  oauth2:

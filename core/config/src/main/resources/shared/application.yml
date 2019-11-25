@@ -1,29 +1,46 @@
+# Logging levels
 logging:
   level:
+    org.springframework: ERROR
     org.springframework.security: INFO
+    org.hibernate: ERROR
 
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 60000
+# Hystrix timeout time (60 secs)
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+
+# Enable hystrix for feign clients
 feign:
-  client.config.default.loggerLevel: full
   hystrix.enabled: true
+  client.config.default.loggerLevel: full
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
+# Enable actuator endpoints
+management.endpoints.web.exposure.include: '*'
 
+spring.jpa.properties.hibernate:
+  dialect: org.hibernate.dialect.MySQLDialect
+  current_session_context_class: thread
+  format_sql: true
+
+# USING MYSQL
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        hbm2ddl.auto: ${DB_DDL_AUTO}
+
+# Eureka client configs
 eureka:
   instance:
     prefer-ip-address: true
   client:
     fetchRegistry: true
+    healthcheck:
+      enabled: true
     serviceUrl:
       defaultZone: http://${MMN_CORE_REGISTRY_HOST:localhost}:${MMN_CORE_REGISTRY_PORT:8082}/${MMN_CORE_REGISTRY_CONTEXTPATH:eureka}/
 

@@ -29,6 +29,7 @@ public class CartProduct {
     private Product product;
     @ManyToOne
     private ShoppingCart shoppingCart;
+    @Builder.Default
     private BigDecimal quantity = BigDecimal.ONE;
     private BigDecimal price;
     private BigDecimal discount;

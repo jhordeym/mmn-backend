@@ -1,9 +1,14 @@
-### IMPORTANT: THIS FILE SHOULD BE NAMED THE SAME AS : ${MMN_BUSINESS_PAYMENT_NAME} ###
-
-#server:
-#  context-path: ${MMN_BUSINESS_PAYMENT_CONTEXTPATH:payments}
-#  port: ${MMN_BUSINESS_PAYMENT_PORT:8182}
+# RANDOM PORT
 server.port: 0
+
+info.app:
+  name: Travined - Payment Service
+  description: Spring boot application
+  version: 1.0.0
+
+app.payment:
+  clientId: "${MMN_PAYMENT_CLIENT_ID}"
+  clientSecret: "${MMN_PAYMENT_CLIENT_SECRET}"
 
 #security:
 #  oauth2:
@@ -16,31 +21,3 @@ server.port: 0
 #      grant-type: client_credentials
 #      scope: server
 
-# USING POSTGRESQL
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: developer
-    password: Password1234
-  jpa:
-    show-sql: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        default_schema: payment
-        ddl-auto: update
-        hbm2ddl.auto: update
-
-app.payment:
-  clientId: "${MMN_PAYMENT_CLIENT_ID}"
-  clientSecret: "${MMN_PAYMENT_CLIENT_SECRET}"
-
-#spring:
-#  data:
-#    mongodb:
-#      # shared database across services (can be improved)
-#      host: ${MMN_MONGODB_HOST:localhost}
-#      port: ${MMN_MONGODB_PORT:27017}
-#      username: ${MMN_MONGODB_USER:user}
-#      password: ${MMN_MONGODB_PASSWORD:Password1234}
-#      database: ${MMN_MONGODB_DATABASE:mmn}

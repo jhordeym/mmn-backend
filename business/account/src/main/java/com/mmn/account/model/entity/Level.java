@@ -33,6 +33,7 @@ public class Level {
     @ManyToOne
     @JoinColumn(name = "CHILD_ID")
     private Account child;
+    @Builder.Default
     private LevelStatus status = LevelStatus.Inactive;
     private Integer score;
     private LocalDate activeDate;

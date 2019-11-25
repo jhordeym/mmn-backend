@@ -1,9 +1,10 @@
-### IMPORTANT: THIS FILE SHOULD BE NAMED THE SAME AS : ${MMN_BUSINESS_AUTH_NAME} ###
-
-#server:
-#  context-path: ${MMN_BUSINESS_AUTH_CONTEXTPATH:uaa}
-#  port: ${MMN_BUSINESS_AUTH_PORT:8180}
+# RANDOM PORT
 server.port: 0
+
+info.app:
+  name: Travined - Auth Service
+  description: Spring boot application
+  version: 1.0.0
 
 #security:
 #  oauth2:

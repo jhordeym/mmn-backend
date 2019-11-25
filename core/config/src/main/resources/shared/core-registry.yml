@@ -1,7 +1,16 @@
-server:
-  port: ${MMN_CORE_REGISTRY_PORT:8082}
+# REQUIRED PORT
+server.port: ${MMN_CORE_REGISTRY_PORT:8082}
 
-ribbon:
-  eureka:
-    enabled: true
+# Should not register it-self
+eureka.client:
+  register-with-eureka: false
+  fetch-registry: false
+
+#logging Levels
+logging.level.comnetflix:
+  eureka: OFF
+  discovery: OFF
+
+# Enable ribbon for eureka
+ribbon.eureka.enabled: true
 
