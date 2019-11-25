@@ -18,7 +18,7 @@
         <!-- Submodules -->
         <dependency>
             <groupId>com.mmn</groupId>
-            <artifactId>business-mail-api</artifactId>
+            <artifactId>mail-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!-- Custom dependencies -->

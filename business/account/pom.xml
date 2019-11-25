@@ -25,7 +25,7 @@
 		-->
 		<dependency>
 			<groupId>com.mmn</groupId>
-			<artifactId>business-mail-impl</artifactId>
+			<artifactId>mail-impl</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
