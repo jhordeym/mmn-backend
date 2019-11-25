@@ -16,11 +16,6 @@ feign:
 # Enable actuator endpoints
 management.endpoints.web.exposure.include: '*'
 
-spring.jpa.properties.hibernate:
-  dialect: org.hibernate.dialect.MySQLDialect
-  current_session_context_class: thread
-  format_sql: true
-
 # USING MYSQL
 spring:
   datasource:
@@ -31,6 +26,7 @@ spring:
     show-sql: true
     properties:
       hibernate:
+        format_sql: true
         hbm2ddl.auto: ${DB_DDL_AUTO}
 
 # Eureka client configs
