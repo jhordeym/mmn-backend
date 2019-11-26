@@ -8,4 +8,5 @@ import lombok.Data;
 public class PassRecoveryDto {
     private String id;
     private String token;
+    private String newPassword;
 }

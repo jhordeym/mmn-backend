@@ -2,9 +2,8 @@ package com.mmn.account.service;
 
 import com.mmn.account.client.EmailClient;
 import com.mmn.account.config.AccountAsyncTaskConfig;
-import com.mmn.account.controller.AccountController;
-import com.mmn.account.model.dto.InviteDto;
 import com.mmn.account.exceptions.EmailException;
+import com.mmn.account.model.dto.InviteDto;
 import com.mmn.account.model.entity.Account;
 import com.mmn.account.model.entity.Level;
 import com.mmn.mail.api.dto.Email;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.MessagingException;
 
@@ -28,18 +26,14 @@ public class AccountEmailService {
     private final EmailClient emailService;
 
     @Async(AccountAsyncTaskConfig.THREAD_POOL_TASK_EXECUTOR)
-    public void sendConfirmationEmail(Account account, ServletUriComponentsBuilder servletUriComponentsBuilder) {
+    public void sendConfirmationEmail(final Account account, final String link) {
         log.info("Sending confirmation to...");
         try {
             emailService.sendEmail(
                     Email.builder()
                             .to(account.getEmail())
                             .subject(CONFIRMATION_SUB)
-                            .text(servletUriComponentsBuilder
-                                    .path(AccountController.MAIL_CONFIRM_URI)
-                                    .queryParam("id", account.getId())
-                                    .build()
-                                    .toUri().toString())
+                            .text(link + account.getId())
                             .build());
         } catch (final MessagingException e) {
             throw new EmailException(e.getStackTrace().toString());
@@ -47,19 +41,14 @@ public class AccountEmailService {
     }
 
     @Async(AccountAsyncTaskConfig.THREAD_POOL_TASK_EXECUTOR)
-    public void sendRecoveryEmail(Account account, ServletUriComponentsBuilder servletUriComponentsBuilder) {
+    public void sendRecoveryEmail(final Account account, final String link) {
         log.info("Sending recovery to...");
         try {
             emailService.sendEmail(
                     Email.builder()
                             .to(account.getEmail())
                             .subject(RECOVERY_SUB)
-                            .text(servletUriComponentsBuilder
-                                    .path(AccountController.MAIL_RECOVER_URI)
-                                    .queryParam("id", account.getId())
-                                    .queryParam("token", account.getResetToken())
-                                    .build()
-                                    .toUri().toString())
+                            .text(link + account.getResetToken())
                             .build());
         } catch (final MessagingException e) {
             throw new EmailException(e.getStackTrace().toString());
@@ -67,14 +56,14 @@ public class AccountEmailService {
     }
 
     @Async(AccountAsyncTaskConfig.THREAD_POOL_TASK_EXECUTOR)
-    public void sendInviteEmail(InviteDto invite, Level level) {
+    public void sendInviteEmail(final InviteDto invite, final Level level) {
         log.info("Sending invite to...");
         try {
             emailService.sendEmail(
                     Email.builder()
                             .to(invite.getEmailInvited())
                             .subject(INVITE_SUB)
-                            .text(invite.getLink() + "/" + level.getId().toString())
+                            .text(invite.getLink() + level.getId())
                             .build()
             );
         } catch (final MessagingException e) {

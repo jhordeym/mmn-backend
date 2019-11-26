@@ -15,6 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
@@ -30,7 +31,7 @@ public class ShoppingCart {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    private String id;
+    private UUID id;
     private String accountId;
     @Embedded
     private Address alternativeAddress;

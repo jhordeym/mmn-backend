@@ -20,5 +20,6 @@ public class Payment {
     @Id
     private String id;
     private PaymentMethod method;
-    private String currency;
+    private String value;
+    private String currency_code;
 }

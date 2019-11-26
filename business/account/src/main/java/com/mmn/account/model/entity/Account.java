@@ -33,6 +33,7 @@ public class Account {
     private String email;
     private String phone;
 
+    @Column(updatable = false)
     private String password;
     private String resetToken;
 

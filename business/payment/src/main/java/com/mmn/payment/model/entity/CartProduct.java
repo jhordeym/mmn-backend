@@ -24,7 +24,7 @@ public class CartProduct {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    private String id;
+    private UUID id;
     @ManyToOne
     private Product product;
     @ManyToOne

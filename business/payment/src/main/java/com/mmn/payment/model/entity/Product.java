@@ -24,10 +24,11 @@ public class Product {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    private String id;
+    private UUID id;
     private String name;
     private String description;
-    private String type;
+    private String category;
+    private String imageUrl;
     private BigDecimal price;
     private BigDecimal priceTC;
 }
