@@ -30,7 +30,9 @@ public class ShoppingCart {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @Column(length=36)
     private String id;
+    @Column(length=36)
     private String accountId;
     @Embedded
     private Address alternativeAddress;

@@ -1,9 +1,7 @@
 package com.mmn.account.service;
 
 import com.mmn.account.exceptions.AlreadyActiveEmailInviteException;
-import com.mmn.account.model.dto.InviteDto;
-import com.mmn.account.model.dto.LoginDto;
-import com.mmn.account.model.dto.PassRecoveryDto;
+import com.mmn.account.model.dto.*;
 import com.mmn.account.model.entity.Account;
 import com.mmn.account.model.entity.Level;
 import com.mmn.account.model.type.LevelStatus;
@@ -13,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -29,41 +27,31 @@ public class AccountService {
     private final PasswordHandler passwordHandler;
     private final LevelRepository levelRepository;
 
-    public Account save(final Account account,
-                        final ServletUriComponentsBuilder servletUriComponentsBuilder,
-                        final String enableEmail) {
+    public Account save(final AccountLinkDto accountLinkDto) {
+        final Account account = accountLinkDto.getAccount();
         final Optional<Account> existingAccount = this.accountRepository.findByEmail(account.getEmail());
         if (existingAccount.isPresent()) {
             log.info("Account already exists -> Update...");
-            final Account existingAcc = existingAccount.get();
-            account.setId(existingAcc.getId());
-            handleImportantFields(account, existingAcc);
-        } else {
-            log.info("New account -> Encrypting password and saving...");
-            account.setPassword(passwordHandler.encode(account.getPassword()));
+            return _update(account, existingAccount.get());
         }
+        log.info("New account -> Encrypting password and saving...");
+        // encryptPass
+        account.setPassword(passwordHandler.encode(account.getPassword()));
         final Account savedAccount = accountRepository.save(account.newToken());
-        if (enableEmail.equals("true")) {
-            accountEmailService.sendConfirmationEmail(savedAccount, servletUriComponentsBuilder);
+        // sendEmail
+        if (Objects.nonNull(accountLinkDto.getLink())) {
+            accountEmailService.sendConfirmationEmail(savedAccount, accountLinkDto.getLink());
         }
         return savedAccount.hidePassAndToken();
     }
 
-    private void handleImportantFields(final Account newAcc, final Account existingAcc) {
-        // Mandatory Non Null Fields
-        if (Objects.isNull(newAcc.getPhone())) {
-            newAcc.setPhone(existingAcc.getPhone());
-        }
-        if (Objects.isNull(newAcc.getResetToken()) && Objects.nonNull(existingAcc.getResetToken())) {
-            newAcc.setResetToken(existingAcc.getResetToken());
-        }
-        if (this.passwordHandler.match(newAcc.getPassword(), existingAcc.getPassword())) {
-            log.info("... -> Keeping the same password...");
-            newAcc.setPassword(existingAcc.getPassword());
-        } else {
-            log.info("... -> Updating password as well...");
-            newAcc.setPassword(passwordHandler.encode(newAcc.getPassword()));
-        }
+    private Account _update(final Account account, final Account existing) {
+        account.setId(existing.getId());
+        return accountRepository.save(account).hidePassAndToken();
+    }
+
+    public boolean exists(final Account account) {
+        return this.accountRepository.existsByEmailOrPhone(account.getEmail(), account.getPassword());
     }
 
 
@@ -77,11 +65,10 @@ public class AccountService {
         return Optional.empty();
     }
 
-    public boolean forgot(final String login,
-                          final ServletUriComponentsBuilder servletUriComponentsBuilder) {
-        final Optional<Account> existingAccount = this.accountRepository.findByEmailOrPhone(login, login);
+    public boolean forgot(final ChangePassDto changePassDto) {
+        final Optional<Account> existingAccount = this.accountRepository.findByEmailOrPhone(changePassDto.getEmail(), changePassDto.getEmail());
         if (existingAccount.isPresent()) {
-            accountEmailService.sendRecoveryEmail(existingAccount.get(), servletUriComponentsBuilder);
+            accountEmailService.sendRecoveryEmail(existingAccount.get(), changePassDto.getLink());
             return true;
         }
         return false;
@@ -89,7 +76,7 @@ public class AccountService {
 
 
     public boolean confirmAccount(final String id) {
-        final Optional<Account> existingAccount = this.accountRepository.findById(UUID.fromString(id));
+        final Optional<Account> existingAccount = this.accountRepository.findById(id);
         if (existingAccount.isPresent()) {
             accountRepository.save(existingAccount.get().confirmed());
             return true;
@@ -101,6 +88,7 @@ public class AccountService {
     public boolean recoverAccount(final PassRecoveryDto passRecoveryDto) {
         final Optional<Account> existingAccount = this.accountRepository.findByIdAndResetToken(passRecoveryDto.getId(), passRecoveryDto.getToken());
         if (existingAccount.isPresent()) {
+            existingAccount.get().setPassword(this.passwordHandler.encode(passRecoveryDto.getNewPassword()));
             this.accountRepository.save(existingAccount.get().updateToken());
             return true;
         }
@@ -113,9 +101,9 @@ public class AccountService {
             throw new AlreadyActiveEmailInviteException();
         }
         //cria quantos niveis forem emitidos, enquanto não ativar um convite específico
-        final Level level = new Level();
-        level.setParent(invite.getAccount());
-        level.setEmailInvited(invite.getEmailInvited());
+        final Level level = Level.builder()
+                .parent(invite.getAccount())
+                .emailInvited(invite.getEmailInvited()).build();
         final Level savedLevel = levelRepository.save(level);
         accountEmailService.sendInviteEmail(invite, savedLevel);
         return savedLevel;
@@ -140,4 +128,26 @@ public class AccountService {
         return 1;
     }
 
+    public int changePassword(final ChangePassDto changePassDto) {
+        final Optional<Account> existingAccount = this.accountRepository.findByEmail(changePassDto.getEmail());
+        if (existingAccount.isPresent()) {
+            return this.accountRepository.updatePassword(this.passwordHandler.encode(changePassDto.getNewPass()), existingAccount.get().getId());
+        }
+        return 0;
+    }
+    
+    public Account update(final Account account) {
+    	return accountRepository.save(account);
+    }
+
+    @Transactional
+    public int updatePassword(final Account account) {
+    	return accountRepository.updatePassword(
+    			passwordHandler.encode(
+    					account.getPassword()
+    					), 
+    			account.getId()
+    			);
+    }
+    
 }

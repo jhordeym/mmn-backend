@@ -26,13 +26,15 @@ public class Account {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    private UUID id;
+    @Column(length=50)
+    private String id;
 
     /* Login by either to or phone,
         but to is mandatory! */
     private String email;
     private String phone;
 
+    @Column(updatable = false)
     private String password;
     private String resetToken;
 

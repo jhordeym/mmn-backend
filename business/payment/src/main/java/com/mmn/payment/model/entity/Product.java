@@ -9,7 +9,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Entity
 @Data
@@ -24,10 +23,13 @@ public class Product {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @Column(length=36)
     private String id;
     private String name;
     private String description;
-    private String type;
+    private String category;
+    private String imageUrl;
+    private Renovation renovation = Renovation.None;
     private BigDecimal price;
     private BigDecimal priceTC;
 }

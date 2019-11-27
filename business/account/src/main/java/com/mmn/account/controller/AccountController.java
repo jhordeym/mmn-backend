@@ -1,19 +1,15 @@
 package com.mmn.account.controller;
 
-import com.mmn.account.model.dto.InviteDto;
-import com.mmn.account.model.dto.LoginDto;
-import com.mmn.account.model.dto.PassRecoveryDto;
+import com.mmn.account.model.dto.*;
 import com.mmn.account.model.entity.Account;
 import com.mmn.account.model.entity.Level;
 import com.mmn.account.model.type.AccountStatus;
 import com.mmn.account.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -22,43 +18,29 @@ import java.util.Optional;
 @Slf4j
 public class AccountController {
 
-    public static final String MAIL_CONFIRM_URI = "/confirm";
-    public static final String MAIL_RECOVER_URI = "/recover";
     @Autowired
     private AccountService accountService;
 
     @PostMapping
-    public ResponseEntity<Account> save(@RequestBody final Account account,
-                                        // optional (to skip to spam)
-                                        @RequestParam(value = "useMail", defaultValue = "true", required = false) final String enableMail) {
-
-        final Account body = accountService.save(account, ServletUriComponentsBuilder.fromCurrentRequest(), enableMail);
+    public Account save(@RequestBody final AccountLinkDto account) {
+        if (Objects.isNull(account.getAccount()))
+            return null;
+        final Account body = accountService.save(account);
         log.debug("Account saved successfully");
-        return ResponseEntity.status(HttpStatus.CREATED).body(body);
+        return body;
     }
 
     @PostMapping("/change-pass")
-    public ResponseEntity<Account> changePassword(@RequestBody final Account account) {
-        // TODO: create service to changepassword
-        return null;
+    public int changePassword(@RequestBody final ChangePassDto changePassDto) {
+        return accountService.changePassword(changePassDto);
     }
 
     @PostMapping("/forgot")
-    public ResponseEntity<String> forgot(@RequestBody final String login) {
-        if (accountService.forgot(login, ServletUriComponentsBuilder.fromCurrentRequest())) {
-            return ResponseEntity.status(HttpStatus.OK).body(AccountStatus.WaitingPasswordRecovery.toString());
+    public String forgot(@RequestBody final ChangePassDto changePassDto) {
+        if (accountService.forgot(changePassDto)) {
+            return AccountStatus.WaitingPasswordRecovery.toString();
         }
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(HttpStatus.NO_CONTENT.toString());
-    }
-
-    // Already got the mail
-    @PostMapping("/referal")
-    public Level validateReferralCode(@RequestBody InviteDto inviteDto) {
-        try {
-            return accountService.validateReferralCode(inviteDto);
-        } catch (Exception e) {
-            return null;
-        }
+        return null;
     }
 
     // send to to invite new commers
@@ -72,35 +54,60 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody final LoginDto loginDto) {
+    public Account login(@RequestBody final LoginDto loginDto) {
         final Optional<Account> login = accountService.login(loginDto);
         if (login.isPresent()) {
             log.debug("Login successful");
-            return ResponseEntity.status(HttpStatus.OK).body(login.get());
+            return login.get();
         }
         log.debug("Login failed");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HttpStatus.UNAUTHORIZED.toString());
+        return null;
     }
 
-    @GetMapping(MAIL_CONFIRM_URI)
-    public ResponseEntity<String> confirmAccount(@RequestParam("id") final String id) {
+    // Validate referral code by email;
+    @PostMapping("/mail/referral")
+    public Level validateReferralCode(@RequestBody InviteDto inviteDto) {
+        try {
+            return accountService.validateReferralCode(inviteDto);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    // Confirm account by email;
+    @GetMapping("/mail/confirm")
+    public String confirmAccount(@RequestParam("id") final String id) {
         if (accountService.confirmAccount(id)) {
             log.debug("Account confirmed");
-            return ResponseEntity.status(HttpStatus.OK).body(AccountStatus.Authenticated.toString());
+            return AccountStatus.Authenticated.name();
         }
         log.debug("Account recovered");
-        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(HttpStatus.EXPECTATION_FAILED.toString());
+        return null;
     }
 
-    @GetMapping("/forgot/" + MAIL_RECOVER_URI)
-    public ResponseEntity<String> recoverAccount(@RequestParam("id") final String id,
-                                                 @RequestParam("token") final String token) {
+    // Confirm recover account by email;
+    @PatchMapping("/mail/recover")
+    public String recoverAccount(@RequestParam("id") final String id,
+                                 @RequestParam("token") final String token) {
         if (accountService.recoverAccount(PassRecoveryDto.builder().id(id).token(token).build())) {
             log.debug("Account recovered");
-            return ResponseEntity.status(HttpStatus.OK).body(AccountStatus.Recovered.toString());
+            return AccountStatus.Recovered.toString();
         }
         log.debug("Failed recovering");
-        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(HttpStatus.EXPECTATION_FAILED.toString());
+        return null;
+    }
+
+    @PutMapping
+    public Account update(@RequestBody final Account account) {
+        final Account body = accountService.update(account);
+        log.debug("Account saved successfully");
+        return body;
+    }
+
+    @PatchMapping
+    public void updatePassword(@RequestBody final Account account) {
+        final int body = accountService.updatePassword(account);
+        log.debug("Account password updated successfully");
     }
 
 
