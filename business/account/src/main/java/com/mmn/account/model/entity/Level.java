@@ -26,7 +26,8 @@ public class Level {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    private UUID id;
+    @Column(length=36)
+    private String id;
     @ManyToOne
     @JoinColumn(name = "PARENT_ID")
     private Account parent;

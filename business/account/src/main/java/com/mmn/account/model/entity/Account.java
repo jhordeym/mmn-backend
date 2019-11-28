@@ -26,7 +26,7 @@ public class Account {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(length=50)
+    @Column(length=36)
     private String id;
 
     /* Login by either to or phone,

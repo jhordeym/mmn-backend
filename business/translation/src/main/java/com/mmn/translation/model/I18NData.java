@@ -6,10 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
@@ -24,10 +21,13 @@ public class I18NData {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    private UUID id;
+    @Column(length=36)
+    private String id;
     @Column(name = "_language")
     private String language;
     @Column(name = "_key")
     private String key;
+    @Lob
+    @Column
     private String value;
 }

@@ -88,7 +88,7 @@ public class I18NDataService {
         return dataList.stream().map(this::deleteOne).collect(Collectors.toList());
     }
 
-    private boolean checkAndDoIfExists(final I18NData data, Consumer<UUID> consumer) {
+    private boolean checkAndDoIfExists(final I18NData data, Consumer<String> consumer) {
         final Optional<I18NData> optionalI18NData = this.repository.findByLanguageAndKey(data.getLanguage(), data.getKey());
         if (optionalI18NData.isPresent()) {
             consumer.accept(optionalI18NData.get().getId());
