@@ -21,6 +21,7 @@
         <module>translation</module>
         <module>account</module>
         <module>payment</module>
+        <module>reservation</module>
     </modules>
 
 </project>
