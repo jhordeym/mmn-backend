@@ -25,7 +25,6 @@ public class ProductController {
     @GetMapping("/{id}")
     public Product get(@PathVariable("/{id}") final String id) {
         // comment here
-        // other comment
         return productRepository.findById(id).orElse(null);
     }
 
