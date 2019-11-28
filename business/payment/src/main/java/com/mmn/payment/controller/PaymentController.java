@@ -10,6 +10,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/payments")
 @Slf4j
 public class PaymentController {
-	//TODO
-    // added comment
 }
