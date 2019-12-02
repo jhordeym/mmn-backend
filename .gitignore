@@ -29,3 +29,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/staging/
+.DS_Store
