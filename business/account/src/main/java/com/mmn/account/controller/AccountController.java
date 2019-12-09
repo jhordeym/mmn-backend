@@ -5,6 +5,7 @@ import com.mmn.account.model.entity.Account;
 import com.mmn.account.model.entity.Level;
 import com.mmn.account.model.type.AccountStatus;
 import com.mmn.account.service.AccountService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +17,9 @@ import java.util.Optional;
 @CrossOrigin("*")
 @RequestMapping("/accounts")
 @Slf4j
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AccountController {
-
-    @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
 
     @PostMapping
     public Account save(@RequestBody final AccountLinkDto account) {
@@ -28,6 +28,19 @@ public class AccountController {
         final Account body = accountService.save(account);
         log.debug("Account saved successfully");
         return body;
+    }
+
+    @PutMapping
+    public Account update(@RequestBody final Account account) {
+        final Account body = accountService.update(account);
+        log.debug("Account saved successfully");
+        return body;
+    }
+
+    @PatchMapping
+    public void updatePassword(@RequestBody final Account account) {
+        final int body = accountService.updatePassword(account);
+        log.debug("Account password updated successfully");
     }
 
     @PostMapping("/change-pass")
@@ -95,19 +108,6 @@ public class AccountController {
         }
         log.debug("Failed recovering");
         return null;
-    }
-
-    @PutMapping
-    public Account update(@RequestBody final Account account) {
-        final Account body = accountService.update(account);
-        log.debug("Account saved successfully");
-        return body;
-    }
-
-    @PatchMapping
-    public void updatePassword(@RequestBody final Account account) {
-        final int body = accountService.updatePassword(account);
-        log.debug("Account password updated successfully");
     }
 
 

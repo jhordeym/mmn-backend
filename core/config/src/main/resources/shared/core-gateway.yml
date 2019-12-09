@@ -12,6 +12,7 @@ ribbon:
   ReadTimeout: 30000
 
 zuul:
+  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
   ignoredServices: '*'
   host:
     connect-timeout-millis: 600000
