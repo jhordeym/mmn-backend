@@ -33,11 +33,15 @@ spring:
     config:
       enabled: false
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASS}
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:application;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: sa
+  h2:
+    console:
+      enabled: true
   jpa:
+    database: H2
     show-sql: true
     properties:
       hibernate:

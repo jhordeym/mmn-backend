@@ -21,4 +21,6 @@ public class Subscription {
 	private LocalDate next;
 	private Integer renovationTimes;
 	
+	private Integer invitationLeft;
+	
 }

@@ -1,6 +1,9 @@
 package com.mmn.payment.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.mmn.payment.model.type.ProductParamType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +12,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -29,7 +35,20 @@ public class Product {
     private String description;
     private String category;
     private String imageUrl;
+    //marca se produto é um subscricao <> None
+    @Enumerated(EnumType.STRING)
     private Renovation renovation = Renovation.None;
-    private BigDecimal price;
+    private BigDecimal price; 
     private BigDecimal priceTC;
+    @OneToMany(targetEntity = ProductParam.class, mappedBy = "product")
+    @JsonIgnoreProperties("product")
+    private List<ProductParam> params = new ArrayList<>();
+    
+    //usado para ser mapeado
+    public ProductParam param(ProductParamType type) {
+    	return params.stream().collect(
+    			Collectors.toMap(ProductParam::getParam, ProductParam::productParam)
+    			).get(type);
+    }
+    
 }
