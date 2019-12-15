@@ -3,6 +3,7 @@ package com.mmn.account.controller;
 import com.mmn.account.model.dto.*;
 import com.mmn.account.model.entity.Account;
 import com.mmn.account.model.type.AccountStatus;
+import com.mmn.account.model.type.RoleEnum;
 import com.mmn.account.service.AccountService;
 import com.mmn.account.service.LevelService;
 
@@ -22,7 +23,13 @@ public class AccountController {
     
 	private final AccountService accountService;
     private final LevelService levelService;
-    
+
+    @PostMapping("/influencers")
+    public Account saveInfluence(@RequestBody final AccountLinkDto account) {
+    	account.getAccount().setRole(RoleEnum.INFLUENCER);
+    	return save(account);    	
+    }
+
     @PostMapping
     public Account save(@RequestBody final AccountLinkDto account) {
         if (Objects.isNull(account.getAccount()))
