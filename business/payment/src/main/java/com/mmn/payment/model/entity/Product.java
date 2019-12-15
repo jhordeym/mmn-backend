@@ -1,6 +1,5 @@
 package com.mmn.payment.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mmn.payment.model.type.ProductParamType;
 
@@ -41,7 +40,6 @@ public class Product {
     private BigDecimal price; 
     private BigDecimal priceTC;
     @OneToMany(targetEntity = ProductParam.class, mappedBy = "product")
-    @JsonIgnoreProperties("product")
     private List<ProductParam> params = new ArrayList<>();
     
     //usado para ser mapeado

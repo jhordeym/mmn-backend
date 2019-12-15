@@ -8,12 +8,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mmn.payment.model.type.ProductParamType;
 
 import lombok.Data;
 
 @Entity
 @Data
+@JsonIgnoreProperties({"id", "booleanValue", "product"})
 public class ProductParam {
 	
 	@Id

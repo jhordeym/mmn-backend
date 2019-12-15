@@ -18,10 +18,6 @@ public class SubscriptionProductController {
 	@Autowired
 	private ProductRepository productRepository;
 	
-	public void setProductRepository(ProductRepository productRepository) {
-		this.productRepository = productRepository;
-	}
-
 	@GetMapping
 	public List<Product> findAll() {
 		return this.productRepository.findByRenovationNot(Renovation.None);
