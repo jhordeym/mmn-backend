@@ -56,18 +56,24 @@ public class AccountEmailService {
     }
 
     @Async(AccountAsyncTaskConfig.THREAD_POOL_TASK_EXECUTOR)
-    public void sendInviteEmail(final InviteDto invite, final Level level) {
+    public void sendInviteEmail(final InviteDto invite) {
         log.info("Sending invite to...");
-        try {
-            emailService.sendEmail(
-                    Email.builder()
-                            .to(invite.getEmailInvited())
-                            .subject(INVITE_SUB)
-                            .text(invite.getLink() + level.getId())
-                            .build()
-            );
-        } catch (final MessagingException e) {
-            throw new EmailException(e.getStackTrace().toString());
-        }
+        	invite.getEmailsInvited().forEach(
+        			p ->
+        			{
+        				try {
+        					emailService.sendEmail(
+        							Email.builder()
+        							.to(p)
+        							.subject(INVITE_SUB)
+        							.text(invite.getLink() + invite.getAccount().getInviteToken())
+        							.build()
+        							);
+        				} catch (MessagingException e) {
+        					log.error(e.getStackTrace().toString());
+        				}
+        			}
+        			);
     }
+
 }

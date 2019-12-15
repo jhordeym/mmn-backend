@@ -15,7 +15,6 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
@@ -41,8 +40,6 @@ public class ShoppingCart {
     @JsonIgnoreProperties("shoppingCart")
     private List<CartProduct> products;
     private LocalDate creationDate;
-    @ManyToOne
-    private Payment payment;
     private ShoppingType shoppingType;
     private ShoppingCartStatus shoppingCartStatus;
 

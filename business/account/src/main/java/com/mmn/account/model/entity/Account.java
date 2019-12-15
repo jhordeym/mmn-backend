@@ -3,6 +3,8 @@ package com.mmn.account.model.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mmn.account.model.Address;
 import com.mmn.account.model.type.AccountStatus;
+import com.mmn.account.model.type.RoleEnum;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +15,11 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.*;
 
+@Table(
+		indexes = {
+				@Index(columnList = "INVITE_TOKEN", unique = true)
+		}
+		)
 @Entity
 @Data
 @Builder
@@ -37,6 +44,7 @@ public class Account {
     @Column(updatable = false)
     private String password;
     private String resetToken;
+    private String inviteToken;
 
     // Additional fields
     private String name;
@@ -44,9 +52,9 @@ public class Account {
     @Embedded
     private Address address;
     private Date birthDate;
-
-    @OneToMany
-    private List<Role> roles;
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private RoleEnum role = RoleEnum.CLIENT;
     @Builder.Default
     private AccountStatus accountStatus = AccountStatus.New;
     @Builder.Default
@@ -60,26 +68,44 @@ public class Account {
     }
 
 
-    public Account newToken() {
+    public Account newTokens() {
         if (Objects.isNull(getResetToken()))
             return this.updateToken();
+        if (Objects.isNull(getInviteToken())) {
+        	setInviteToken(
+        			base64Enconder()
+        			);
+        }
         return this;
     }
 
     public Account updateToken() {
         setResetToken(
-                Base64.getEncoder().encodeToString(
-                        UUID.randomUUID().toString().getBytes()
-                )
-        );
+        		base64Enconder()
+        		);
         return this;
     }
 
 
-    public Account hidePassAndToken() {
+    private String base64Enconder() {
+		return Base64.getEncoder().encodeToString(
+                UUID.randomUUID().toString().getBytes()
+                );
+	}
+
+
+	public Account hidePassAndToken() {
         setPassword(null);
         setResetToken(null);
         return this;
     }
 
+    public boolean isAdmin() {
+    	try {
+			return this.role.equals(RoleEnum.ADMIN);
+		} catch (Exception e) {
+			return false;
+		}
+    }
+    
 }

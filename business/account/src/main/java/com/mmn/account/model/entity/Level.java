@@ -6,12 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.UUID;
 
+@Table(
+		indexes = {
+				@Index(columnList = "CHILD_ID", unique = true)
+		})
 @Entity
 @Data
 @Builder
@@ -21,13 +23,8 @@ import java.util.UUID;
 public class Level {
     // Id will be used for the invite of child
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    @Column(length=36)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "PARENT_ID")
     private Account parent;
@@ -35,6 +32,7 @@ public class Level {
     @JoinColumn(name = "CHILD_ID")
     private Account child;
     @Builder.Default
+    @Enumerated(EnumType.STRING)
     private LevelStatus status = LevelStatus.Inactive;
     private Integer score;
     private LocalDate activeDate;

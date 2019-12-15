@@ -11,6 +11,9 @@ import com.mmn.payment.model.entity.Product;
 import com.mmn.payment.model.entity.Renovation;
 import com.mmn.payment.repository.ProductRepository;
 
+/*
+ * listar produtos de subscrição
+ */
 @RestController
 @RequestMapping("/subscriptionProducts")
 public class SubscriptionProductController {

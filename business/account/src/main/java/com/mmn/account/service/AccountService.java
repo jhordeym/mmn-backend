@@ -27,8 +27,8 @@ public class AccountService {
     private final PasswordHandler passwordHandler;
     private final LevelRepository levelRepository;
 
-    public Account save(final AccountLinkDto accountLinkDto) {
-        final Account account = accountLinkDto.getAccount();
+    public Account save(final AccountLinkDto accountLinkDto) {    	
+    	final Account account = accountLinkDto.getAccount();
         final Optional<Account> existingAccount = this.accountRepository.findByEmail(account.getEmail());
         if (existingAccount.isPresent()) {
             log.info("Account already exists -> Update...");
@@ -36,16 +36,40 @@ public class AccountService {
         }
         log.info("New account -> Encrypting password and saving...");
         // encryptPass
-        account.setPassword(passwordHandler.encode(account.getPassword()));
-        final Account savedAccount = accountRepository.save(account.newToken());
+        account.setPassword(
+        		passwordHandler.encode(account.getPassword())
+        		);
+        final Account savedAccount = accountRepository.save(
+        		account.newTokens()
+        		);
+        //controle de nível
+        createLevel(account, accountLinkDto.getParentId());
         // sendEmail
         if (Objects.nonNull(accountLinkDto.getLink())) {
             accountEmailService.sendConfirmationEmail(savedAccount, accountLinkDto.getLink());
         }
-        return savedAccount.hidePassAndToken();
+        return savedAccount.hidePassAndToken();        				
     }
 
-    private Account _update(final Account account, final Account existing) {
+    //criar o controle de níveis
+    private void createLevel(Account account, String parentId) {
+		//exceto pra admin
+    	if (account.isAdmin()) {
+			return;
+		}
+		levelRepository.save(
+				Level.builder()
+				.child(
+						account
+						)
+				.parent(
+						accountRepository.findById(parentId).get()
+						)
+				.build()				
+				).getId();
+	}
+
+	private Account _update(final Account account, final Account existing) {
         account.setId(existing.getId());
         return accountRepository.save(account).hidePassAndToken();
     }
@@ -95,37 +119,8 @@ public class AccountService {
         return false;
     }
 
-    public Level invite(final InviteDto invite) {
-        final Optional<Level> optional = levelRepository.findByEmailInvitedAndStatus(invite.getEmailInvited(), LevelStatus.Active);
-        if (optional.isPresent()) {
-            throw new AlreadyActiveEmailInviteException();
-        }
-        //cria quantos niveis forem emitidos, enquanto não ativar um convite específico
-        final Level level = Level.builder()
-                .parent(invite.getAccount())
-                .emailInvited(invite.getEmailInvited()).build();
-        final Level savedLevel = levelRepository.save(level);
-        accountEmailService.sendInviteEmail(invite, savedLevel);
-        return savedLevel;
-    }
-
-    public Level validateReferralCode(final InviteDto inviteDto) {
-        final Optional<Level> optional = levelRepository.findById(
-                UUID.fromString(inviteDto.getId())
-        );
-        if (optional.isPresent() && optional.get().isActive()) {
-            throw new AlreadyActiveEmailInviteException();
-        }
-        final Level level = optional.get();
-        level.setActiveDate(LocalDate.now());
-        level.setStatus(LevelStatus.Active);
-        level.setScore(scoreValidateInvite());
-        return levelRepository.save(level);
-    }
-
-    private Integer scoreValidateInvite() {
-        // TODO Auto-generated method stub
-        return 1;
+    public void invite(final InviteDto invite) {
+        accountEmailService.sendInviteEmail(invite);
     }
 
     public int changePassword(final ChangePassDto changePassDto) {
@@ -149,5 +144,10 @@ public class AccountService {
     			account.getId()
     			);
     }
+
+	public String findByInviteToken(String inviteToken) {
+		Optional<Account> optional = accountRepository.findByInviteToken(inviteToken);
+		return optional.isPresent() ? optional.get().getId() : null;
+	}
     
 }

@@ -1,5 +1,6 @@
 package com.mmn.payment.controller;
 
+import com.mmn.payment.client.AccountClient;
 import com.mmn.payment.model.entity.ShoppingCart;
 import com.mmn.payment.service.ShoppingCartService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,8 @@ public class ShoppingCartController {
 
     @Autowired
     private ShoppingCartService service;
+    @Autowired
+    private AccountClient accountClient;
 
     @PostMapping
     public ShoppingCart save(@RequestBody final ShoppingCart shoppingCart) {
