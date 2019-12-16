@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface I18NDataRepository extends JpaRepository<I18NData, String> {
-    List<I18NData> findAllByLanguage(final String language);
+    List<I18NData> findAllByLanguageIgnoreCase(final String language);
 
-    Optional<I18NData> findByLanguageAndKey(final String language, final String key);
+    Optional<I18NData> findByLanguageAndKeyIgnoreCase(final String language, final String key);
 }

@@ -2,20 +2,20 @@ package com.mmn.payment.controller;
 
 import com.mmn.payment.model.entity.Product;
 import com.mmn.payment.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/products")
-@Slf4j
+@RequiredArgsConstructor
 public class ProductController {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     @GetMapping
     public List<Product> getAll() {
@@ -23,8 +23,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product get(@PathVariable("/{id}") final String id) {
-        // comment here
+    public Product get(@PathVariable("id") final String id) {
         return productRepository.findById(id).orElse(null);
     }
 

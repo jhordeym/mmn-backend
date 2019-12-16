@@ -36,7 +36,7 @@ public class Level {
     private LevelStatus status = LevelStatus.Inactive;
     private Integer score;
     private LocalDate activeDate;
-    private String emailInvited;//same to account child.to
+    private String emailInvited; //same to account child.to
 
     public boolean isActive() {
         return this.score.equals(LevelStatus.Active);

@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final CartProductRepository cartProductRepository;

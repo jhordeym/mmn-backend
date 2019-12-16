@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import com.mmn.payment.client.fallback.AccountClientFallBack;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient(
         name = "${MMN_BUSINESS_ACCOUNT_NAME:business-account-service}",
@@ -12,7 +14,7 @@ import com.mmn.payment.client.fallback.AccountClientFallBack;
 )
 public interface AccountClient {
 
-	@PutMapping("/level/{id}")
-    public void atualizaLevelActive(@PathVariable("id") String accountId);
+    @PutMapping("/accounts/level/active")
+    void updateLevelActive(@RequestBody final String accountId);
 	
 }

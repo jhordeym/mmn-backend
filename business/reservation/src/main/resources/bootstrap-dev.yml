@@ -1,0 +1,15 @@
+server:
+  port: 8190
+
+spring:
+  application:
+    name: ${MMN_BUSINESS_RESERVATION_NAME:business-reservation-service}
+
+  cloud:
+    config:
+      enabled: false
+
+eureka:
+  client:
+    enabled: false
+

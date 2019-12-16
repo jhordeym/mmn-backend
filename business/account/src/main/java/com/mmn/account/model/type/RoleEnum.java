@@ -1,7 +1,9 @@
 package com.mmn.account.model.type;
 
-public enum RoleEnum {
+import lombok.Getter;
 
+@Getter
+public enum RoleEnum {
 	ADMIN,
 	INFLUENCER,
 	CLIENT

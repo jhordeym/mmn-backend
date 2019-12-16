@@ -39,4 +39,8 @@ zuul:
     ${MMN_BUSINESS_MAIL_NAME:business-mail-service}:
       path: /${MMN_BUSINESS_MAIL_CONTEXTPATH:mail}/**
       serviceId: ${MMN_BUSINESS_MAIL_NAME:business-mail-service}
+    # RESERVATION
+    ${MMN_BUSINESS_RESERVATION_NAME:business-reservation-service}:
+      path: /${MMN_BUSINESS_RESERVATION_CONTEXTPATH:reservation}/**
+      serviceId: ${MMN_BUSINESS_RESERVATION_NAME:business-reservation-service}
 

@@ -26,7 +26,7 @@ public class I18NDataService {
         return groupBy.entrySet().stream().map((entry) -> dataList2dto(entry.getKey(), entry.getValue())).collect(Collectors.toList());
     }
 
-    private List<I18NData> allData() {
+    public List<I18NData> allData() {
         return this.repository.findAll();
     }
 
@@ -35,7 +35,7 @@ public class I18NDataService {
         if (Objects.isNull(lang)) {
             return null;
         }
-        return this.dataList2dto(lang, this.repository.findAllByLanguage(lang));
+        return this.dataList2dto(lang, this.repository.findAllByLanguageIgnoreCase(lang));
     }
 
     public I18NData saveOne(final I18NData data) {
@@ -89,7 +89,7 @@ public class I18NDataService {
     }
 
     private boolean checkAndDoIfExists(final I18NData data, Consumer<String> consumer) {
-        final Optional<I18NData> optionalI18NData = this.repository.findByLanguageAndKey(data.getLanguage(), data.getKey());
+        final Optional<I18NData> optionalI18NData = this.repository.findByLanguageAndKeyIgnoreCase(data.getLanguage(), data.getKey());
         if (optionalI18NData.isPresent()) {
             consumer.accept(optionalI18NData.get().getId());
             return true;

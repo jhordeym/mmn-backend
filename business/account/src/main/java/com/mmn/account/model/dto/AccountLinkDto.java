@@ -5,8 +5,7 @@ import lombok.Data;
 
 @Data
 public class AccountLinkDto {
-    private Account account; // new account;
+    private Account account; // new account
     private String parentId; //id da conta que convidou
-    private String link; // to use mail;
-    
+    private String link; // to use mail
 }

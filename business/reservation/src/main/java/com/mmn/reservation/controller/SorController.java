@@ -1,0 +1,76 @@
+package com.mmn.reservation.controller;
+
+import com.mmn.reservation.client.SorClient;
+import com.mmn.reservation.client.SorClientV2;
+import com.mmn.reservation.config.SorProperties;
+import com.mmn.reservation.model.AccountDto;
+import com.mmn.reservation.model.FullLoginDto;
+import com.mmn.reservation.model.LoginDto;
+import com.mmn.reservation.model.LoginResponseDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Slf4j
+@RestController
+@CrossOrigin("*")
+@RequiredArgsConstructor
+@RequestMapping("/sor")
+public class SorController {
+    private static final int TEN_MINUTES = 600000;
+    private final SorClient client;
+    private final SorClientV2 clientV2;
+    private final SorProperties config;
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "Hello";
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<?> create(@RequestHeader("subscriptionId") final String subscriptionId,
+                                    @RequestBody final AccountDto accountDto) {
+        final SorProperties.Pack pack = getPackBySubscriptionId(subscriptionId);
+        if (pack == null) return ResponseEntity.badRequest().body("Invalid ID");
+        return ResponseEntity.ok(clientV2.create(pack.getUsername(), pack.getPassword(), accountDto));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestHeader("subscriptionId") final String subscriptionId,
+                                   @RequestBody final LoginDto loginDto) {
+        final SorProperties.Pack pack = getPackBySubscriptionId(subscriptionId);
+        if (pack == null) return ResponseEntity.badRequest().body("Invalid ID");
+        final String login = this.client.login(FullLoginDto.builder()
+                .APIUsername(pack.getUsername())
+                .APIPassword(pack.getPassword())
+                .Email(loginDto.getEmail())
+                .ContractNumber(loginDto.getContractNumber())
+                .build());
+        final String[] split = login.replaceAll("\"", "").split(":");
+        if (split.length == 2) {
+            return ResponseEntity.ok(
+                    LoginResponseDto.builder()
+                            .token(split[1])
+                            .generateTimeMilis(System.currentTimeMillis())
+                            .expireTimeMilis(System.currentTimeMillis() + TEN_MINUTES)
+                            .build());
+        }
+        return ResponseEntity.ok(login);
+    }
+
+    private SorProperties.Pack getPackBySubscriptionId(final String subscriptionId) {
+        try {
+            int id = Integer.parseInt(subscriptionId);
+            final List<SorProperties.Pack> packs = config.getPacks();
+            if (!(id >= 0 && id < packs.size())) {
+                return null;
+            }
+            return packs.get(id);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+}

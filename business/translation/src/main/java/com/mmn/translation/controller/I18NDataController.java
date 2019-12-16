@@ -18,8 +18,8 @@ public class I18NDataController {
 
     @GetMapping
     @ResponseBody
-    public List<I18NDto> allDto() {
-        return this.service.allDto();
+    public List<I18NData> allData() {
+        return this.service.allData();
     }
 
     @GetMapping("/{lang}")

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mmn.account.model.Address;
 import com.mmn.account.model.type.AccountStatus;
 import com.mmn.account.model.type.RoleEnum;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,13 +12,16 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Base64;
+import java.util.Date;
+import java.util.Objects;
+import java.util.UUID;
 
-@Table(
-		indexes = {
-				@Index(columnList = "INVITE_TOKEN", unique = true)
-		}
-		)
+@Table(indexes = {
+        @Index(columnList = "INVITE_TOKEN", unique = true),
+        @Index(columnList = "EMAIL", unique = true),
+        @Index(columnList = "PHONE", unique = true)
+})
 @Entity
 @Data
 @Builder
@@ -33,17 +35,20 @@ public class Account {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(length=36)
+    @Column(length = 36)
     private String id;
 
     /* Login by either to or phone,
         but to is mandatory! */
+    @Column(name = "EMAIL")
     private String email;
+    @Column(name = "PHONE")
     private String phone;
 
     @Column(updatable = false)
     private String password;
     private String resetToken;
+    @Column(name = "INVITE_TOKEN")
     private String inviteToken;
 
     // Additional fields
@@ -67,45 +72,37 @@ public class Account {
         return this;
     }
 
-
     public Account newTokens() {
-        if (Objects.isNull(getResetToken()))
-            return this.updateToken();
+        if (Objects.isNull(getResetToken())) {
+            updateToken();
+        }
         if (Objects.isNull(getInviteToken())) {
-        	setInviteToken(
-        			base64Enconder()
-        			);
+            setInviteToken(base64Enconder());
         }
         return this;
     }
 
     public Account updateToken() {
-        setResetToken(
-        		base64Enconder()
-        		);
+        setResetToken(base64Enconder());
         return this;
     }
 
-
     private String base64Enconder() {
-		return Base64.getEncoder().encodeToString(
-                UUID.randomUUID().toString().getBytes()
-                );
-	}
+        return Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes());
+    }
 
-
-	public Account hidePassAndToken() {
+    public Account hidePassAndToken() {
         setPassword(null);
         setResetToken(null);
         return this;
     }
 
     public boolean isAdmin() {
-    	try {
-			return this.role.equals(RoleEnum.ADMIN);
-		} catch (Exception e) {
-			return false;
-		}
+        try {
+            return this.role.equals(RoleEnum.ADMIN);
+        } catch (Exception e) {
+            return false;
+        }
     }
-    
+
 }

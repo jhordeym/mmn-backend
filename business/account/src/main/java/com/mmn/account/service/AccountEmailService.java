@@ -5,7 +5,6 @@ import com.mmn.account.config.AccountAsyncTaskConfig;
 import com.mmn.account.exceptions.EmailException;
 import com.mmn.account.model.dto.InviteDto;
 import com.mmn.account.model.entity.Account;
-import com.mmn.account.model.entity.Level;
 import com.mmn.mail.api.dto.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,22 +57,21 @@ public class AccountEmailService {
     @Async(AccountAsyncTaskConfig.THREAD_POOL_TASK_EXECUTOR)
     public void sendInviteEmail(final InviteDto invite) {
         log.info("Sending invite to...");
-        	invite.getEmailsInvited().forEach(
-        			p ->
-        			{
-        				try {
-        					emailService.sendEmail(
-        							Email.builder()
-        							.to(p)
-        							.subject(INVITE_SUB)
-        							.text(invite.getLink() + invite.getAccount().getInviteToken())
-        							.build()
-        							);
-        				} catch (MessagingException e) {
-        					log.error(e.getStackTrace().toString());
-        				}
-        			}
-        			);
+        invite.getEmailsInvited().forEach(
+                email -> {
+                    try {
+                        emailService.sendEmail(
+                                Email.builder()
+                                        .to(email)
+                                        .subject(INVITE_SUB)
+                                        .text(invite.getLink() + invite.getAccount().getInviteToken())
+                                        .build()
+                        );
+                    } catch (MessagingException e) {
+                        log.error(e.getStackTrace().toString());
+                    }
+                }
+        );
     }
 
 }
