@@ -3,6 +3,7 @@ package com.mmn.reservation.controller;
 import com.mmn.reservation.client.SorClient;
 import com.mmn.reservation.client.SorClientV2;
 import com.mmn.reservation.config.SorProperties;
+import com.mmn.reservation.exception.FeignErrorException;
 import com.mmn.reservation.model.AccountDto;
 import com.mmn.reservation.model.FullLoginDto;
 import com.mmn.reservation.model.LoginDto;
@@ -40,15 +41,18 @@ public class SorController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestHeader("subscriptionId") final String subscriptionId,
-                                   @RequestBody final LoginDto loginDto) {
+                                   @RequestBody final LoginDto loginDto) throws FeignErrorException {
+        log.info(loginDto.toString());
         final SorProperties.Pack pack = getPackBySubscriptionId(subscriptionId);
         if (pack == null) return ResponseEntity.badRequest().body("Invalid ID");
-        final String login = this.client.login(FullLoginDto.builder()
+        final FullLoginDto fullLoginDto = FullLoginDto.builder()
                 .APIUsername(pack.getUsername())
                 .APIPassword(pack.getPassword())
                 .Email(loginDto.getEmail())
                 .ContractNumber(loginDto.getContractNumber())
-                .build());
+                .build();
+        log.info(fullLoginDto.toString());
+        final String login = this.client.login(fullLoginDto);
         final String[] split = login.replaceAll("\"", "").split(":");
         if (split.length == 2) {
             return ResponseEntity.ok(

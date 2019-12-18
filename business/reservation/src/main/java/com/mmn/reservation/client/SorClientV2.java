@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(
         name = "SorApiV2",
-        url = "${SOR_URL:https://api.saveonuat.com}"
+        url = "${reservation.sor_url}/v2"
 )
 @Headers({
         "Content-Type: application/json"
 })
 public interface SorClientV2 {
-    @PostMapping("/v2/clubmembership/createdefault")
+    @PostMapping("/clubmembership/createdefault")
     AccountResponseDto create(@RequestHeader("x-saveon-username") String username,
                               @RequestHeader("x-saveon-secret") String secret,
                               @RequestBody AccountDto accountDto);
