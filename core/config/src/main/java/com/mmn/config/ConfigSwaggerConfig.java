@@ -13,7 +13,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class ConfigSwaggerConfig {
     private static final String GROUP_NAME = "ConfigAPI";
     @Bean
-    public Docket gatewayApi() {
+    public Docket configApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
