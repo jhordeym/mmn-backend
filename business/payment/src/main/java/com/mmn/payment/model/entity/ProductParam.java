@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mmn.payment.model.type.ProductParamType;
+import com.mmn.payment.model.type.ProductCategoryType;
 
 import lombok.Data;
 
@@ -24,7 +24,7 @@ public class ProductParam {
 	@ManyToOne
 	private Product product;
 	@Enumerated(EnumType.STRING)
-	private ProductParamType param;
+	private ProductCategoryType param;
 	private String value;
 	
 	public Boolean getBooleanValue() {
@@ -45,6 +45,14 @@ public class ProductParam {
 	
 	public ProductParam productParam() {
 		return this;
+	}
+
+	public boolean containsValue() {
+		try {
+			return Integer.valueOf(this.value) > 0;
+		} catch (NumberFormatException e) {
+			return Boolean.valueOf(this.value);
+		}
 	}
 	
 }

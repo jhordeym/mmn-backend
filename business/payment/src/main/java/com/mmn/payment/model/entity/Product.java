@@ -1,7 +1,7 @@
 package com.mmn.payment.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.mmn.payment.model.type.ProductParamType;
+import com.mmn.payment.model.type.ProductCategoryType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,8 +13,14 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Table(
+		indexes = {
+				@Index(columnList = "category")
+		}
+		)
 @Entity
 @Data
 @Builder
@@ -32,7 +38,8 @@ public class Product {
     private String id;
     private String name;
     private String description;
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private ProductCategoryType category;
     private String imageUrl;
     //marca se produto é um subscricao <> None
     @Enumerated(EnumType.STRING)
@@ -43,10 +50,20 @@ public class Product {
     private List<ProductParam> params = new ArrayList<>();
     
     //usado para ser mapeado
-    public ProductParam param(ProductParamType type) {
+    public ProductParam param(ProductCategoryType type) {
     	return params.stream().collect(
     			Collectors.toMap(ProductParam::getParam, ProductParam::productParam)
     			).get(type);
     }
+
+	public ProductCategoryType contains(ProductCategoryType productCategoryType) {
+		Optional<ProductParam> param = this.params.stream().filter(
+				p -> p.getParam().equals(productCategoryType)
+				).findFirst();
+		if (param.isPresent() && param.get().containsValue()) {
+			return productCategoryType;
+		}
+		return null;
+	}
     
 }
