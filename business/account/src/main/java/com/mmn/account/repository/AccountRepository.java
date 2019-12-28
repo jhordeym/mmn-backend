@@ -17,5 +17,9 @@ public interface AccountRepository extends JpaRepository<Account, String> {
 	@Modifying
 	@Query("update Account a set a.password = :password where a.id = :id")
 	int updatePassword(@Param("password") final String password, @Param("id") final String id);
+	@Modifying
+	@Query("update Account a set a.paymentActive = :paymentActive where a.id = :id")
+	int updatePaymentActive(@Param("paymentActive") final boolean paymentActive, @Param("id") final String id);
+
 	Optional<Account> findByInviteToken(String inviteToken);
 }

@@ -65,6 +65,8 @@ public class Account {
     @Builder.Default
     private LocalDate creationDate = LocalDate.now();
     private LocalDate updatedDate;
+    
+    private Boolean paymentActive = false;
 
     public Account confirmed() {
         setAccountStatus(AccountStatus.Authenticated);

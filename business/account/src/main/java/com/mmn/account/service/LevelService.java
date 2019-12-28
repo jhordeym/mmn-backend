@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.mmn.account.exceptions.AlreadyActiveEmailInviteException;
 import com.mmn.account.model.entity.Level;
 import com.mmn.account.model.type.LevelStatus;
+import com.mmn.account.repository.AccountRepository;
 import com.mmn.account.repository.LevelRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class LevelService {
 	
 	private final LevelRepository levelRepository;
+	private final AccountRepository accountRepository;
 	
     public Level validateReferralCode(final String accountId) {
         final Optional<Level> optional = 
@@ -28,6 +30,7 @@ public class LevelService {
         level.setActiveDate(LocalDate.now());
         level.setStatus(LevelStatus.Active);
         level.setScore(scoreValidateInvite());
+        accountRepository.updatePaymentActive(true, accountId);
         return levelRepository.save(level);
     }
 
