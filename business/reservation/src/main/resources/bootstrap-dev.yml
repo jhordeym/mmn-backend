@@ -1,6 +1,8 @@
 server:
   port: 8190
 
+reservation.sor_url: 'https://api.saveonresorts.com'
+
 spring:
   application:
     name: ${MMN_BUSINESS_RESERVATION_NAME:business-reservation-service}
