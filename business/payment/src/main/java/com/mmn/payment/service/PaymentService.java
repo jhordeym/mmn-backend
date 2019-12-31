@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.mmn.payment.client.AccountClient;
 import com.mmn.payment.model.entity.Payment;
 import com.mmn.payment.repository.PaymentRepository;
+import com.mmn.payment.repository.ShoppingCartRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,8 +16,10 @@ public class PaymentService {
     private final AccountClient accountClient;
     private final SubscriptionService subscriptionService;
 	private final PaymentRepository paymentRepository;
+	private final ShoppingCartService shoppingCartService;
 	
 	public Payment save(Payment payment) {
+		shoppingCartService.save(payment.getShoppingCart());
 		payment = paymentRepository.save(payment);
 		createSubscription(payment);
 		accountClient.updateLevelActive(
