@@ -31,7 +31,7 @@ public class AccountController {
      */
     @PostMapping("/login")
     public Account login(@RequestBody final LoginDto loginDto) {
-        return accountService.login(loginDto).orElse(null);
+        return accountService.login(loginDto);
     }
 
     @GetMapping

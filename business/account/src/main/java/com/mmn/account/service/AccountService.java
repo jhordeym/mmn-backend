@@ -81,14 +81,14 @@ public class AccountService {
     }
 
 
-    public Optional<Account> login(final LoginDto loginDto) {
+    public Account login(final LoginDto loginDto) {
         final Optional<Account> existingAccount = this.accountRepository.findByEmailOrPhone(loginDto.getLogin(), loginDto.getLogin());
         if (existingAccount.isPresent()) {
             final Account acc = existingAccount.get();
             if (this.passwordHandler.match(loginDto.getPassword(), acc.getPassword()))
-                return Optional.of(acc.hidePassAndToken());
+                return acc.hidePassAndToken();
         }
-        return Optional.empty();
+        throw new AccountException("Account doesn't exist");
     }
 
     public boolean forgot(final ChangePassDto changePassDto) {

@@ -83,6 +83,21 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.subethamail/subethasmtp -->
+        <dependency>
+            <groupId>org.subethamail</groupId>
+            <artifactId>subethasmtp</artifactId>
+            <version>3.1.7</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.kemitix/wiser-assertions -->
+        <dependency>
+            <groupId>net.kemitix</groupId>
+            <artifactId>wiser-assertions</artifactId>
+            <version>0.5.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

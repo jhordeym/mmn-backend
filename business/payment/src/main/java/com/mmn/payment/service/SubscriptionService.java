@@ -31,7 +31,7 @@ public class SubscriptionService {
         }
     }
 
-	public void createSubscription(String accountId, Product product) {
+	public void createSubscription(final String accountId, final Product product) {
 		Subscription subscription = findLatestSubscriptionBy(accountId);
 		subscription = subscription == null ? new Subscription() : subscription;
 		subscription.setProduct(
