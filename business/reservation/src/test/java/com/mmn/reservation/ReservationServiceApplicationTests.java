@@ -31,8 +31,23 @@ class ReservationServiceApplicationTests {
     }
 
     @Test
-    void login() throws Exception {
+    void login_valid() throws Exception {
         final LoginDto body = LoginDto.builder().Email("test1@gmail.com").ContractNumber("7cd3db97-2f59-46f6-a91a-7812d40273a8").build();
+        final Gson gson = new Gson();
+        final String json = gson.toJson(body);
+        final val result = mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post("/sor/login")
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("subscriptionId", "0"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void login_invalid() throws Exception {
+        final LoginDto body = LoginDto.builder().Email("asdadasdasdas@gmail.com").ContractNumber("asdasdasdasdas").build();
         final Gson gson = new Gson();
         final String json = gson.toJson(body);
         final val result = mockMvc.perform(

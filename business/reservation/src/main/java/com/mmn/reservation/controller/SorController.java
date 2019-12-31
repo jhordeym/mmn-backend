@@ -1,18 +1,17 @@
 package com.mmn.reservation.controller;
 
-import com.mmn.reservation.client.SorClient;
-import com.mmn.reservation.client.SorClientV2;
 import com.mmn.reservation.config.SorProperties;
-import com.mmn.reservation.exception.FeignErrorException;
 import com.mmn.reservation.model.AccountDto;
 import com.mmn.reservation.model.FullLoginDto;
 import com.mmn.reservation.model.LoginDto;
 import com.mmn.reservation.model.LoginResponseDto;
+import com.mmn.reservation.service.SorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -22,9 +21,8 @@ import java.util.List;
 @RequestMapping("/sor")
 public class SorController {
     private static final int TEN_MINUTES = 600000;
-    private final SorClient client;
-    private final SorClientV2 clientV2;
     private final SorProperties config;
+    private final SorService service;
 
     @GetMapping("/hello")
     public String hello() {
@@ -33,7 +31,7 @@ public class SorController {
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestHeader("subscriptionId") final String subscriptionId,
-                                    @RequestBody final AccountDto accountDto) {
+                                    @RequestBody final AccountDto accountDto) throws IOException {
         final SorProperties.Pack pack = getPackBySubscriptionId(subscriptionId);
         if (pack == null) return ResponseEntity.badRequest().body("Invalid ID");
         return ResponseEntity.ok(clientV2.create(pack.getUsername(), pack.getPassword(), accountDto));
@@ -41,7 +39,7 @@ public class SorController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestHeader("subscriptionId") final String subscriptionId,
-                                   @RequestBody final LoginDto loginDto) throws FeignErrorException {
+                                   @RequestBody final LoginDto loginDto) throws IOException {
         log.info(loginDto.toString());
         final SorProperties.Pack pack = getPackBySubscriptionId(subscriptionId);
         if (pack == null) return ResponseEntity.badRequest().body("Invalid ID");
@@ -61,6 +59,8 @@ public class SorController {
                             .generateTimeMilis(System.currentTimeMillis())
                             .expireTimeMilis(System.currentTimeMillis() + TEN_MINUTES)
                             .build());
+        } else if (login.replaceAll("\"", "").equals("Member not found.")) {
+            throw new RuntimeException("Member not found.");
         }
         return ResponseEntity.ok(login);
     }

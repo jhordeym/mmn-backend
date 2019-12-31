@@ -11,3 +11,5 @@ spring:
       fail-fast: true
       username: ${MMN_CORE_CONFIG_USER:user}
       password: ${MMN_CORE_CONFIG_PASSWORD:Password1234}
+
+reservation.sor_url: "${SOR_URL}"

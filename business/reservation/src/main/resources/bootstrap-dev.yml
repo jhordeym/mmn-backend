@@ -1,6 +1,8 @@
 server:
   port: 8190
 
+reservation.sor_url: "https://api.saveonuat.com"
+
 reservation.sor_url: 'https://api.saveonresorts.com'
 
 spring:

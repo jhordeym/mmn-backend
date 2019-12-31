@@ -1,6 +1,5 @@
 package com.mmn.reservation.client;
 
-import com.mmn.reservation.exception.FeignErrorException;
 import com.mmn.reservation.model.FullLoginDto;
 import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
