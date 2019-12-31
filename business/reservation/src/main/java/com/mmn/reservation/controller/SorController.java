@@ -34,7 +34,7 @@ public class SorController {
                                     @RequestBody final AccountDto accountDto) throws IOException {
         final SorProperties.Pack pack = getPackBySubscriptionId(subscriptionId);
         if (pack == null) return ResponseEntity.badRequest().body("Invalid ID");
-        return ResponseEntity.ok(clientV2.create(pack.getUsername(), pack.getPassword(), accountDto));
+        return ResponseEntity.ok(this.service.create(pack.getUsername(), pack.getPassword(), accountDto));
     }
 
     @PostMapping("/login")
@@ -50,7 +50,8 @@ public class SorController {
                 .ContractNumber(loginDto.getContractNumber())
                 .build();
         log.info(fullLoginDto.toString());
-        final String login = this.client.login(fullLoginDto);
+        final String login = this.service.login(fullLoginDto);
+        log.info(login.toString());
         final String[] split = login.replaceAll("\"", "").split(":");
         if (split.length == 2) {
             return ResponseEntity.ok(

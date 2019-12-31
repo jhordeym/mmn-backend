@@ -3,8 +3,10 @@ package com.mmn.reservation.client;
 import com.mmn.reservation.model.FullLoginDto;
 import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @FeignClient(
         name = "SorApi",
@@ -15,5 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 })
 public interface SorClient {
     @PostMapping("/clubmembership/getlogintokennovalidation")
-    String login(@RequestBody FullLoginDto loginDto) throws FeignErrorException;
+    @ResponseBody
+    ResponseEntity<String> login(@RequestBody FullLoginDto loginDto);
 }
