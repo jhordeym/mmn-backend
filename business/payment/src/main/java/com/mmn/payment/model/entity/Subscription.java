@@ -29,8 +29,17 @@ public class Subscription {
 	private LocalDate start;
 	private LocalDate current;
 	private LocalDate next;
-	private Integer renovationTimes;
+	private Integer renovationTimes = 0;
 	
 	private Integer invitationLeft;
+
+	public Subscription toBegin() {
+		this.renovationTimes++;
+		this.current = this.start;
+		this.start = LocalDate.now();
+		this.next = this.product.getRenovation().equals(Renovation.Month) ? 
+				this.start.plusMonths(1) : this.start.plusYears(1);
+		return this;
+	}
 		
 }

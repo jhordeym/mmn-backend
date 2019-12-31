@@ -52,4 +52,8 @@ public class ShoppingCart {
         }
     }
 
+	public boolean isSubscrition() {
+		return this.shoppingType.equals(ShoppingType.Subscription);
+	}
+
 }

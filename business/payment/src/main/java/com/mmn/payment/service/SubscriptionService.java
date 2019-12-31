@@ -1,9 +1,15 @@
 package com.mmn.payment.service;
 
+import com.mmn.payment.model.entity.CartProduct;
+import com.mmn.payment.model.entity.Product;
 import com.mmn.payment.model.entity.Subscription;
 import com.mmn.payment.repository.SubscriptionRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Optional;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +30,18 @@ public class SubscriptionService {
             return null;
         }
     }
+
+	public void createSubscription(String accountId, Product product) {
+		Subscription subscription = findLatestSubscriptionBy(accountId);
+		subscription = subscription == null ? new Subscription() : subscription;
+		subscription.setProduct(
+				product
+				);
+		subscription.setAccountId(accountId);
+		this.subscriptionRepository.save(
+				subscription.toBegin()
+				);
+	}
 
 
 }

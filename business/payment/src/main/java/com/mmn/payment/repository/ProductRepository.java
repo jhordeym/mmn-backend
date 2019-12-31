@@ -11,6 +11,6 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, String> {
     List<Product> findByRenovationNot(final Renovation renovationNone);
 
-	List<Product> findByCatetory(List<ProductCategoryType> list);
+	List<Product> findByCategoryIn(List<ProductCategoryType> list);
     
 }

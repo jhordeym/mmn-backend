@@ -7,7 +7,6 @@ import com.mmn.payment.repository.ProductRepository;
 import com.mmn.payment.repository.ShoppingCartRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

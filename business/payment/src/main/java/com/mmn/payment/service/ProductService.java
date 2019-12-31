@@ -21,7 +21,7 @@ public class ProductService {
 	private final SubscriptionRepository subscriptionRepository;
 
 	public List<Product> listAvaiableSystemProducts(String subscriptonId) {
-		return this.productRepository.findByCatetory(
+		return this.productRepository.findByCategoryIn(
 				listarCategoriasSistema(subscriptonId)
 				);
 	}
@@ -40,7 +40,7 @@ public class ProductService {
 	}
 
 	public List<Product> listAvaiableMyTrip(String subscriptonId) {
-		return this.productRepository.findByCatetory(
+		return this.productRepository.findByCategoryIn(
 				listarCategoriasMyTrip(subscriptonId)
 				);
 	}

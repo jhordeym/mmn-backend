@@ -1,8 +1,8 @@
 package com.mmn.payment.controller;
 
-import com.mmn.payment.client.AccountClient;
 import com.mmn.payment.model.entity.Payment;
-import com.mmn.payment.repository.PaymentRepository;
+import com.mmn.payment.service.PaymentService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PaymentController {
 
-    private final PaymentRepository paymentRepository;
-    private final AccountClient accountClient;
+    private final PaymentService paymentService;
 
     @PostMapping
     public Payment save(@RequestBody final Payment payment) {
-        final Payment savedPayment = paymentRepository.save(payment);
-        accountClient.updateLevelActive(
-				savedPayment.getShoppingCart().getAccountId()
-        );
+        final Payment savedPayment = paymentService.save(payment);        
         return savedPayment;
     }
+    
 }
