@@ -15,12 +15,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -29,22 +29,21 @@ public class SorService {
     private final SorClient client;
     private final SorClientV2 clientV2;
     private final SorProperties properties;
+    //
     private final boolean useFeign = false;
     private final Gson gson = new Gson();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public String login(final FullLoginDto fullLoginDto) throws IOException {
         if (useFeign) {
             return this.client.login(fullLoginDto).getBody();
         }
-        final String json = gson.toJson(fullLoginDto);
         final String URL = properties.getSOR_URL().concat("/clubmembership/getlogintokennovalidation");
-        final HttpPost request = new HttpPost(URL);
-        request.setEntity(new ByteArrayEntity(json.getBytes("UTF-8")));
-        request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-        final HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-        final HttpEntity entity = httpResponse.getEntity();
-        final String login = EntityUtils.toString(entity, Charset.defaultCharset());
-        return login;
+        final String JSON = gson.toJson(fullLoginDto);
+        final Map<String, String> HEADERS = new HashMap<>();
+        HEADERS.put(HttpHeaders.CONTENT_TYPE, "application/json");
+        final HttpEntity entity = this.genericPost(URL, JSON, HEADERS);
+        return objectMapper.readValue(entity.getContent(), String.class);
     }
 
     public AccountResponseDto create(
@@ -54,17 +53,21 @@ public class SorService {
         if (useFeign) {
             return clientV2.create(username, password, accountDto).getBody();
         }
-        final String json = gson.toJson(accountDto);
         final String URL = properties.getSOR_URL().concat("/v2/clubmembership/createdefault");
+        final String JSON = gson.toJson(accountDto);
+        final Map<String, String> HEADERS = new HashMap<>();
+        HEADERS.put(HttpHeaders.CONTENT_TYPE, "application/json");
+        HEADERS.put("x-saveon-username", username);
+        HEADERS.put("x-saveon-secret", password);
+        final HttpEntity entity = this.genericPost(URL, JSON, HEADERS);
+        return objectMapper.readValue(entity.getContent(), AccountResponseDto.class);
+    }
+
+    private HttpEntity genericPost(final String URL, final String json, Map<String, String> headers) throws IOException {
         final HttpPost request = new HttpPost(URL);
         request.setEntity(new ByteArrayEntity(json.getBytes("UTF-8")));
-        request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-        request.setHeader("x-saveon-username", username);
-        request.setHeader("x-saveon-secret", password);
+        headers.forEach((k, v) -> request.setHeader(k, v));
         final HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-        final HttpEntity entity = httpResponse.getEntity();
-        final ObjectMapper objectMapper = new ObjectMapper();
-        final AccountResponseDto accountResponseDto = objectMapper.readValue(entity.getContent(), AccountResponseDto.class);
-        return accountResponseDto;
+        return httpResponse.getEntity();
     }
 }
