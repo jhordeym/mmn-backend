@@ -26,7 +26,7 @@ public class SubscriptionProductController {
 
     @GetMapping
     public List<Product> findAll() {
-        return this.productRepository.findByRenovationNot(Renovation.None);
+        return this.productRepository.findByRenovationNotOrderByPriceAsc(Renovation.None);
     }
 
 }

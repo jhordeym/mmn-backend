@@ -1,6 +1,7 @@
 # Logging levels
 logging:
   level:
+    ROOT: "${TRAVINED_LOGGING:ERROR}"
     org.springframework: ERROR
     org.springframework.security: INFO
     org.hibernate: ERROR
@@ -23,6 +24,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USER}
     password: ${DB_PASS}
+    connectionInitSql: "SET NAMES 'utf8mb4'"
   jpa:
     show-sql: ${DB_DDL_SHOW:true}
     properties:

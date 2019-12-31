@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Bean;
 
-
+/**
+ * NOT BEING USED
+ */
 @FeignClient(
         name = "PayPalV1",
         url = "https://api.sandbox.paypal.com/v1/",

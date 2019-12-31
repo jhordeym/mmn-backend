@@ -1,6 +1,10 @@
 package com.mmn.account.service;
 
-import com.mmn.account.model.dto.*;
+import com.mmn.account.exceptions.AccountException;
+import com.mmn.account.model.dto.AccountLinkDto;
+import com.mmn.account.model.dto.ChangePassDto;
+import com.mmn.account.model.dto.InviteDto;
+import com.mmn.account.model.dto.LoginDto;
 import com.mmn.account.model.entity.Account;
 import com.mmn.account.model.entity.Level;
 import com.mmn.account.repository.AccountRepository;
@@ -10,8 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -27,7 +33,8 @@ public class AccountService {
         final Optional<Account> existingAccount = this.accountRepository.findByEmail(account.getEmail());
         if (existingAccount.isPresent()) {
             log.info("Account already exists -> Update...");
-            return _update(account, existingAccount.get());
+            throw new AccountException("Account already exists");
+            // return _update(account, existingAccount.get());
         }
         log.info("New account -> Encrypting password and saving...");
         // encryptPass
@@ -60,17 +67,17 @@ public class AccountService {
         ).getId();
     }
 
-    private Account _update(final Account account, final Account existing) {
-        account.setId(existing.getId());
-        return update(account);
-    }
-
     public Account update(final Account account) {
-        return accountRepository.save(account).newTokens().hidePassAndToken();
+        final Optional<Account> existing = this.accountRepository.findByEmail(account.getEmail());
+        if (!existing.isPresent()) {
+            return account;
+        }
+        account.setId(existing.get().getId());
+        return accountRepository.save(account).hidePassAndToken();
     }
 
     public boolean exists(final Account account) {
-        return this.accountRepository.existsByEmailOrPhone(account.getEmail(), account.getPassword());
+        return this.accountRepository.existsByEmailOrPhone(account.getEmail(), account.getPhone());
     }
 
 
@@ -90,28 +97,24 @@ public class AccountService {
             accountEmailService.sendRecoveryEmail(existingAccount.get(), changePassDto.getLink());
             return true;
         }
-        return false;
+        throw new AccountException("Account doesn't exist");
     }
 
 
-    public boolean confirmAccount(final String id) {
+    public Account confirmAccount(final String id) {
         final Optional<Account> existingAccount = this.accountRepository.findById(id);
         if (existingAccount.isPresent()) {
-            accountRepository.save(existingAccount.get().confirmed());
-            return true;
+            return accountRepository.save(existingAccount.get().confirmed());
         }
-        return false;
+        throw new AccountException("Account doesn't exist");
     }
 
-
-    public boolean recoverAccount(final PassRecoveryDto passRecoveryDto) {
-        final Optional<Account> existingAccount = this.accountRepository.findByIdAndResetToken(passRecoveryDto.getId(), passRecoveryDto.getToken());
+    public Account recoverAccount(final String token) {
+        final Optional<Account> existingAccount = this.accountRepository.findByResetToken(token);
         if (existingAccount.isPresent()) {
-            existingAccount.get().setPassword(this.passwordHandler.encode(passRecoveryDto.getNewPassword()));
-            this.accountRepository.save(existingAccount.get().updateToken());
-            return true;
+            return this.accountRepository.save(existingAccount.get().updateToken()).hidePassAndToken();
         }
-        return false;
+        throw new AccountException("Account doesn't exist");
     }
 
     public void invite(final InviteDto invite) {
@@ -120,6 +123,7 @@ public class AccountService {
 
     @Transactional
     public int updatePassword(final Account account) {
+        log.info(account.toString());
         return accountRepository.updatePassword(
                 passwordHandler.encode(
                         account.getPassword()
@@ -129,8 +133,14 @@ public class AccountService {
     }
 
     public String findByInviteToken(String inviteToken) {
-        Optional<Account> optional = accountRepository.findByInviteToken(inviteToken);
-        return optional.isPresent() ? optional.get().getId() : null;
+        final Optional<Account> optional = accountRepository.findByInviteToken(inviteToken);
+        if (optional.isPresent()) {
+            return optional.get().getId();
+        }
+        throw new AccountException("Invalid Token");
     }
 
+    public List<Account> all() {
+        return accountRepository.findAll().stream().map(Account::hidePassAndToken).collect(Collectors.toList());
+    }
 }

@@ -13,7 +13,7 @@ public interface AccountRepository extends JpaRepository<Account, String> {
 	boolean existsByEmailOrPhone(final String email, final String phone);
 	Optional<Account> findByEmail(final String email);
 	Optional<Account> findByEmailOrPhone(final String email, final String phone);
-	Optional<Account> findByIdAndResetToken(final String id, final String token);
+	Optional<Account> findByResetToken(final String token);
 	@Modifying
 	@Query("update Account a set a.password = :password where a.id = :id")
 	int updatePassword(@Param("password") final String password, @Param("id") final String id);

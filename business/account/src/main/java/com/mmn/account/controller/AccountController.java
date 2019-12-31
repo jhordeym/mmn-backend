@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -31,6 +32,16 @@ public class AccountController {
     @PostMapping("/login")
     public Account login(@RequestBody final LoginDto loginDto) {
         return accountService.login(loginDto).orElse(null);
+    }
+
+    @GetMapping
+    public List<Account> listAccounts() {
+        return accountService.all();
+    }
+
+    @PostMapping("/exists")
+    public boolean exists(@RequestBody Account account) {
+        return accountService.exists(account);
     }
 
     /**
@@ -93,11 +104,9 @@ public class AccountController {
      * @param account
      */
     @PutMapping("/pass/update")
-    public void updatePassword(@RequestBody final Account account) {
-        final int body = accountService.updatePassword(account);
-        log.debug("Account password updated successfully");
+    public int updatePassword(@RequestBody final Account account) {
+        return accountService.updatePassword(account);
     }
-
 
     //
     // send to to invite new commers
@@ -108,32 +117,21 @@ public class AccountController {
 
     // Confirm account by email;
     @GetMapping("/mail/confirm")
-    public String confirmAccount(@RequestParam("id") final String id) {
-        if (accountService.confirmAccount(id)) {
-            log.debug("Account confirmed");
-            return AccountStatus.Authenticated.name();
-        }
-        log.debug("Account recovered");
-        return null;
+    public Account confirmAccount(@RequestParam("id") final String id) {
+        return accountService.confirmAccount(id);
     }
 
     // Confirm recover account by email;
-    @PatchMapping("/mail/recover")
-    public String recoverAccount(@RequestParam("id") final String id,
-                                 @RequestParam("token") final String token) {
-        if (accountService.recoverAccount(PassRecoveryDto.builder().id(id).token(token).build())) {
-            log.debug("Account recovered");
-            return AccountStatus.Recovered.toString();
-        }
-        log.debug("Failed recovering");
-        return null;
+    @GetMapping("/mail/recover")
+    public Account recoverAccount(@RequestParam("token") final String token) {
+        return accountService.recoverAccount(token);
     }
 
     // verificar invite
     // retorna o id do account parent, pai do invite ou null, se nao existir
     @PostMapping("/invite/verify-token")
-    public String verifyInviteToken(@RequestBody final String inviteToken) {
-        return accountService.findByInviteToken(inviteToken);
+    public String verifyInviteToken(@RequestBody final InviteTokenDto tokenDto) {
+        return accountService.findByInviteToken(tokenDto.getInviteToken());
     }
 
     @PutMapping("/level/active")

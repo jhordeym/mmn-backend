@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, String> {
-    List<Product> findByRenovationNot(final Renovation renovationNone);
+    List<Product> findByRenovationNotOrderByPriceAsc(final Renovation renovationNone);
 
 	List<Product> findByCategoryIn(List<ProductCategoryType> list);
     

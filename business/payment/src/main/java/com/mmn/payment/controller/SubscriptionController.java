@@ -15,8 +15,8 @@ public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
 
-    @GetMapping("/{id}")
-    public Subscription findLatestSubscriptionBy(@PathVariable("id") final String accountId) {
+    @GetMapping("/{accountId}")
+    public Subscription findLatestSubscriptionBy(@PathVariable("accountId") final String accountId) {
         return subscriptionService.findLatestSubscriptionBy(accountId);
     }
 
