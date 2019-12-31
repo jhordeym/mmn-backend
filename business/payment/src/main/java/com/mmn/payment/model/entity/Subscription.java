@@ -23,7 +23,8 @@ public class Subscription {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Column(length=36)
-	private String accountId;
+	private String id;
+    private String accountId;
 	@ManyToOne
 	private Product product;
 	private LocalDate start;
@@ -35,10 +36,10 @@ public class Subscription {
 
 	public Subscription toBegin() {
 		this.renovationTimes++;
-		this.current = this.start;
-		this.start = LocalDate.now();
+		this.current = LocalDate.now();
+		this.start = this.start == null ? this.current : this.start;
 		this.next = this.product.getRenovation().equals(Renovation.Month) ? 
-				this.start.plusMonths(1) : this.start.plusYears(1);
+				this.current.plusMonths(1) : this.current.plusYears(1);
 		return this;
 	}
 		
