@@ -61,6 +61,7 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private RoleEnum role = RoleEnum.CLIENT;
     @Builder.Default
+    @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus = AccountStatus.New;
     @Builder.Default
     private LocalDate creationDate = LocalDate.now();
@@ -106,5 +107,4 @@ public class Account {
             return false;
         }
     }
-
 }

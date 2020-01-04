@@ -7,11 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -21,6 +17,7 @@ import javax.persistence.ManyToOne;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Payment {
     @Id
+    @Column(length = 36)
     private String id;
     @Enumerated(EnumType.STRING)
     private PaymentMethod method;

@@ -2,10 +2,4 @@
 
 -- noinspection SqlNoDataSourceInspectionForFile
 
--- insert into role(name) values ('ADMIN');
--- insert into role(name) values ('INVESTOR');
--- insert into role(name) values ('CLIENT');
-
--- insert into account(id, name, email, phone, password) values ('4c8414ae-b548-41cb-8e48-bbbf272f1e56', 'admin', 'admin@admin.com','adminPhone','Password1234');
-
--- insert into account_roles(account_id, roles_id) values('4c8414ae-b548-41cb-8e48-bbbf272f1e56', 1);
+insert into account(id, email, phone, invite_token, reset_token, name, last_name, role, account_status, creation_date, password, payment_active) values ('bbef6274-3a0a-4c7c-9747-324aefa267fc', 'admin@travined.com', 'phone_placeholder','YzNiYjNiZTYtOTFmOS00YmI0LThlYjctNGU3M2YyYzBjMDZi','OGMxZmRmMzktNTg3Ni00NGM1LTk5OGMtMTBjMWFjZmU5Njk2','Travined','Admin','ADMIN','New','2019-12-16','$2a$10$XWgghRZSzIkBzvvNYikoLupuoqRjz.TQEogCy5huxfdgvZ.os/3ui', true);
