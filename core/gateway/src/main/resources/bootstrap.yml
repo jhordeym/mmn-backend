@@ -12,6 +12,11 @@ spring:
       username: ${MMN_CORE_CONFIG_USER:user}
       password: ${MMN_CORE_CONFIG_PASSWORD:Password1234}
 
+  security:
+    user:
+      name: travinedGatewayAdmin
+      password: trav2020inedAdmin!#1234
+
 server:
   ssl:
     key-store-type: "${TRAVINED_KEYSTORETYPE:PKCS12}"
