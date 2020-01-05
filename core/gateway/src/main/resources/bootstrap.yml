@@ -14,8 +14,8 @@ spring:
 
   security:
     user:
-      name: travinedGatewayAdmin
-      password: trav2020inedAdmin!#1234
+      name: "${TRAVINED_SECURITY_NAME:travinedGatewayAdmin}"
+      password: "${TRAVINED_SECURITY_PASSWORD:trav2020inedAdmin!#1234}"
 
 server:
   ssl:
