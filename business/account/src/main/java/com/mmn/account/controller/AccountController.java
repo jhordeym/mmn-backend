@@ -52,7 +52,7 @@ public class AccountController {
      */
     @PostMapping("/influencers")
     public Account saveInfluencer(@RequestBody final AccountLinkDto account) {
-        account.getAccount().setRole(RoleEnum.INFLUENCER);
+        account.getAccount().setRole(RoleEnum.INVESTOR);
         return saveAccount(account);
     }
 

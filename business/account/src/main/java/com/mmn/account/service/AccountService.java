@@ -9,6 +9,7 @@ import com.mmn.account.model.entity.Account;
 import com.mmn.account.model.entity.Level;
 import com.mmn.account.repository.AccountRepository;
 import com.mmn.account.repository.LevelRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,7 @@ public class AccountService {
     }
 
     //criar o controle de níveis
-    private void createLevel(final Account account, final String parentId) {
+    private void createLevel(@NonNull final Account account, final String parentId) {
         //exceto pra admin
         if (account.isAdmin() || parentId == null) {
             return;

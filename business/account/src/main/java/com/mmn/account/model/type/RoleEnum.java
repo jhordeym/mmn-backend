@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum RoleEnum {
 	ADMIN,
-	INFLUENCER,
+	INVESTOR,
+	AMBASSADOR,
 	CLIENT
 }
