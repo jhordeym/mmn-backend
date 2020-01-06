@@ -136,6 +136,9 @@ public class AccountService {
     public String findByInviteToken(String inviteToken) {
         final Optional<Account> optional = accountRepository.findByInviteToken(inviteToken);
         if (optional.isPresent()) {
+        	if (optional.get().isinvestor()) {
+        		throw new AccountException("Investor do not have invites!");
+        	}        		
             return optional.get().getId();
         }
         throw new AccountException("Invalid Token");

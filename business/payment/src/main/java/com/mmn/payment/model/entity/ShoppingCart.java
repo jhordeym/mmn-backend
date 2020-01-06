@@ -56,4 +56,7 @@ public class ShoppingCart {
 		return this.shoppingType.equals(ShoppingType.Subscription);
 	}
 
+	public boolean isRenovation() {
+		return this.shoppingType.equals(ShoppingType.Renovation);
+	}
 }

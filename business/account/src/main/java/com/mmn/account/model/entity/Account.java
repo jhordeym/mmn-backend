@@ -107,4 +107,13 @@ public class Account {
             return false;
         }
     }
+    
+    public boolean isinvestor() {
+        try {
+            return this.role.equals(RoleEnum.INVESTOR);
+        } catch (Exception e) {
+            return false;
+        }
+    }    
+    
 }

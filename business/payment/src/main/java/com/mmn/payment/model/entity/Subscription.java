@@ -42,5 +42,10 @@ public class Subscription {
 				this.current.plusMonths(1) : this.current.plusYears(1);
 		return this;
 	}
+	
+	public Subscription toRenovation() {
+		toBegin();
+		return this;
+	}
 		
 }

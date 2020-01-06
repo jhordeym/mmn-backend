@@ -48,7 +48,10 @@ public class Product {
     private BigDecimal priceTC;
     @OneToMany(targetEntity = ProductParam.class, mappedBy = "product")
     private List<ProductParam> params = new ArrayList<>();
-    
+
+    private BigDecimal renovationPrice; 
+    private BigDecimal renovationPriceTC;
+
     //usado para ser mapeado
     public ProductParam param(ProductCategoryType type) {
     	return params.stream().collect(

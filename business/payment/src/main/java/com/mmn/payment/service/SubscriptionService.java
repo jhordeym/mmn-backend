@@ -50,5 +50,11 @@ public class SubscriptionService {
         this.subscriptionRepository.save(subscription.toBegin());
     }
 
+	public void toRenovation(String accountId) {
+		Subscription subscription = findLatestSubscriptionBy(accountId);
+		this.subscriptionRepository.save(
+				subscription.toRenovation()
+				);
+	}
 
 }
