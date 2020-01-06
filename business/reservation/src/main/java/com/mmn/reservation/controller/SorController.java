@@ -1,10 +1,7 @@
 package com.mmn.reservation.controller;
 
 import com.mmn.reservation.config.SorProperties;
-import com.mmn.reservation.model.AccountDto;
-import com.mmn.reservation.model.FullLoginDto;
-import com.mmn.reservation.model.LoginDto;
-import com.mmn.reservation.model.LoginResponseDto;
+import com.mmn.reservation.model.*;
 import com.mmn.reservation.service.SorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -31,15 +29,33 @@ public class SorController {
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestHeader("subscriptionId") final String subscriptionId,
-                                    @RequestBody final AccountDto accountDto) throws IOException {
+                                    @RequestBody final AccountDto accountDto)
+            throws IOException {
         final SorProperties.Pack pack = getPackBySubscriptionId(subscriptionId);
         if (pack == null) return ResponseEntity.badRequest().body("Invalid ID");
         return ResponseEntity.ok(this.service.create(pack.getUsername(), pack.getPassword(), accountDto));
     }
 
+    @PostMapping("/members")
+    public ResponseEntity<?> listAll(
+            @RequestBody(required = false) final Optional<List<ListMembersDto.MemberSearchListDto>> MemberSearchListDto)
+            throws IOException {
+        final SorProperties.Pack pack = getPackBySubscriptionId("3");
+        if (pack == null) return ResponseEntity.badRequest().body("Invalid ID");
+        return ResponseEntity.ok(this.service.listAll(
+                ListMembersDto.builder()
+                        .APIUsername(pack.getUsername())
+                        .APIPassword(pack.getPassword())
+                        .MemberSearchList(MemberSearchListDto.orElse(null))
+                        .build()
+        ));
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestHeader("subscriptionId") final String subscriptionId,
-                                   @RequestBody final LoginDto loginDto) throws IOException {
+    public ResponseEntity<?> login(
+            @RequestHeader("subscriptionId") final String subscriptionId,
+            @RequestBody final LoginDto loginDto)
+            throws IOException {
         log.info(loginDto.toString());
         final SorProperties.Pack pack = getPackBySubscriptionId(subscriptionId);
         if (pack == null) return ResponseEntity.badRequest().body("Invalid ID");
