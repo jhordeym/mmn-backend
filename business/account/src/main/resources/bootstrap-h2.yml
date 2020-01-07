@@ -45,7 +45,9 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        hbm2ddl.auto: create-drop
+        hbm2ddl:
+          auto: create-drop
+          import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
 
 # Eureka client configs
 eureka:

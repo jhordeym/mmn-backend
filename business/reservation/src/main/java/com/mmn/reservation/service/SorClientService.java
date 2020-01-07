@@ -24,7 +24,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SorService {
+public class SorClientService {
     private final SorClient client;
     private final SorClientV2 clientV2;
     private final SorProperties properties;

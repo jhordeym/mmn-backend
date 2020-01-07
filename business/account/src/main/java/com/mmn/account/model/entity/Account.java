@@ -37,7 +37,6 @@ public class Account {
     )
     @Column(length = 36)
     private String id;
-
     /* Login by either to or phone,
         but to is mandatory! */
     @Column(name = "EMAIL")
@@ -66,7 +65,9 @@ public class Account {
     @Builder.Default
     private LocalDate creationDate = LocalDate.now();
     private LocalDate updatedDate;
-    
+
+    private Boolean acceptedTerms = true;
+    private Boolean newsletterEnabled = true;
     private Boolean paymentActive = false;
 
     public Account confirmed() {
