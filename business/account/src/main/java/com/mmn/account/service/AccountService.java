@@ -4,6 +4,7 @@ import com.mmn.account.exceptions.AccountException;
 import com.mmn.account.model.dto.AccountLinkDto;
 import com.mmn.account.model.dto.ChangePassDto;
 import com.mmn.account.model.dto.InviteDto;
+import com.mmn.account.model.dto.LevelTreeDto;
 import com.mmn.account.model.dto.LoginDto;
 import com.mmn.account.model.entity.Account;
 import com.mmn.account.model.entity.Level;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -147,4 +149,28 @@ public class AccountService {
     public List<Account> all() {
         return accountRepository.findAll().stream().map(Account::hidePassAndToken).collect(Collectors.toList());
     }
+
+	public List<LevelTreeDto> listAccountTree(String accountId) {
+		List<LevelTreeDto> result = new ArrayList<>();
+		List<Level> lista = levelRepository.findByParentId(accountId);
+		for (Level level : lista) {
+			makeTree(level, result);
+		}
+		return result;
+	}
+
+	private void makeTree(Level mainLevel, List<LevelTreeDto> listTree) {
+		List<Level> childrens = levelRepository.findByParentId(
+				mainLevel.getChild().getId()
+				);
+		listTree.add(
+				new LevelTreeDto(
+						mainLevel.getChild(), childrens.stream().map(p -> p.getChild()).collect(Collectors.toList())
+						)
+				);
+		for (Level level : childrens) {
+			makeTree(level, listTree);
+		}
+	}
+	
 }

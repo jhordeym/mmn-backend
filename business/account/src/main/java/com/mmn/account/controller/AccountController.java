@@ -2,6 +2,7 @@ package com.mmn.account.controller;
 
 import com.mmn.account.model.dto.*;
 import com.mmn.account.model.entity.Account;
+import com.mmn.account.model.entity.Level;
 import com.mmn.account.model.type.AccountStatus;
 import com.mmn.account.model.type.RoleEnum;
 import com.mmn.account.service.AccountService;
@@ -139,4 +140,9 @@ public class AccountController {
         this.levelService.validateReferralCode(accountId);
     }
 
+    @GetMapping("/level/tree/{accountId}")
+    public List<LevelTreeDto> listAccountTree(@PathVariable final String accountId) {
+    	return this.accountService.listAccountTree(accountId);
+    }
+    
 }
