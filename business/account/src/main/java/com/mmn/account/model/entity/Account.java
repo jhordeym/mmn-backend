@@ -70,6 +70,12 @@ public class Account {
     private Boolean newsletterEnabled = true;
     private Boolean paymentActive = false;
 
+    public static void main(String[] args) {
+//        System.out.println("ID -> " + UUID.randomUUID().toString());
+        System.out.println("inviteToken -> " + Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes()));
+//        System.out.println("resetToken -> " + Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes()));
+    }
+
     public Account confirmed() {
         setAccountStatus(AccountStatus.Authenticated);
         setUpdatedDate(LocalDate.now());
@@ -108,13 +114,23 @@ public class Account {
             return false;
         }
     }
-    
+
     public boolean isinvestor() {
         try {
             return this.role.equals(RoleEnum.INVESTOR);
         } catch (Exception e) {
             return false;
         }
-    }    
-    
+    }
+
+    public Account treeInfo() {
+        return Account.builder()
+                .id(this.getId())
+                .name(this.getName())
+                .lastName(this.getLastName())
+                .email(this.getEmail())
+                .accountStatus(this.getAccountStatus())
+                .role(this.getRole())
+                .build();
+    }
 }

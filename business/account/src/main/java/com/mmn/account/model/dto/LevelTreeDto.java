@@ -4,13 +4,15 @@ import java.util.List;
 
 import com.mmn.account.model.entity.Account;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import com.mmn.account.model.entity.Level;
+import lombok.*;
 
 @Data
-@RequiredArgsConstructor
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class LevelTreeDto {
-
-	private final Account parent;
-	private final List<Account> childrens;
+	private Account parent;
+	private List<LevelTreeDto> children;
 }

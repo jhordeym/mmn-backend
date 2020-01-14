@@ -10,10 +10,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic().and().authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+    protected void configure(final HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/api/reservation/sor/create").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
+                .and().httpBasic()
                 .and().requiresChannel()
                 .anyRequest()
                 .requiresSecure()
@@ -22,7 +24,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) {
-        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
+    public void configure(final WebSecurity web) {
+        web.ignoring()
+                .antMatchers(HttpMethod.POST, "/api/reservation/sor/create")
+                .antMatchers(HttpMethod.OPTIONS, "/**");
     }
 }

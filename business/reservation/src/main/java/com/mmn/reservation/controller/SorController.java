@@ -33,7 +33,7 @@ public class SorController {
 
     @PostMapping("/create-user")
     public ResponseEntity<?> createUser(@RequestHeader("subscriptionId") final String subscriptionId,
-                                    @RequestBody final AccountDto accountDto)
+                                        @RequestBody final AccountDto accountDto)
             throws IOException {
         final SorProperties.Pack pack = getPackBySubscriptionId(subscriptionId);
         if (pack == null) return ResponseEntity.badRequest().body("Invalid ID");
@@ -58,7 +58,8 @@ public class SorController {
     @PostMapping("/create")
     public ResponseEntity<?> passportUserCreate(
             @RequestBody final PassportUser passportUser) {
-        if(Objects.nonNull(passportUserService.save(passportUser))) {
+        final SorProperties.Pack pack = getPackBySubscriptionId("3");
+        if (Objects.nonNull(passportUserService.save(pack, passportUser))) {
             return ResponseEntity.ok(NewUserDataSetResponseDto
                     .builder()
                     .HTTPStatus("200 OK")

@@ -1,11 +1,7 @@
 package com.mmn.account.service;
 
 import com.mmn.account.exceptions.AccountException;
-import com.mmn.account.model.dto.AccountLinkDto;
-import com.mmn.account.model.dto.ChangePassDto;
-import com.mmn.account.model.dto.InviteDto;
-import com.mmn.account.model.dto.LevelTreeDto;
-import com.mmn.account.model.dto.LoginDto;
+import com.mmn.account.model.dto.*;
 import com.mmn.account.model.entity.Account;
 import com.mmn.account.model.entity.Level;
 import com.mmn.account.repository.AccountRepository;
@@ -138,9 +134,9 @@ public class AccountService {
     public String findByInviteToken(String inviteToken) {
         final Optional<Account> optional = accountRepository.findByInviteToken(inviteToken);
         if (optional.isPresent()) {
-        	if (optional.get().isinvestor()) {
-        		throw new AccountException("Investor do not have invites!");
-        	}        		
+            if (optional.get().isinvestor()) {
+                throw new AccountException("Investor do not have invites!");
+            }
             return optional.get().getId();
         }
         throw new AccountException("Invalid Token");
@@ -150,27 +146,28 @@ public class AccountService {
         return accountRepository.findAll().stream().map(Account::hidePassAndToken).collect(Collectors.toList());
     }
 
-	public List<LevelTreeDto> listAccountTree(String accountId) {
-		List<LevelTreeDto> result = new ArrayList<>();
-		List<Level> lista = levelRepository.findByParentId(accountId);
-		for (Level level : lista) {
-			makeTree(level, result);
-		}
-		return result;
-	}
+    public List<LevelTreeDto> listAccountTree(final String accountId) {
+        final List<LevelTreeDto> treeList = new ArrayList<>();
+        final Optional<Account> optionalAccount = accountRepository.findById(accountId);
+        if (!optionalAccount.isPresent()) {
+            return treeList;
+        }
+        final LevelTreeDto top = new LevelTreeDto(optionalAccount.get().treeInfo(), new ArrayList<>());
+        final List<Level> firstLevelNodes = levelRepository.findByParentId(accountId);
+        for (final Level node : firstLevelNodes) {
+            makeTree(node, top);
+        }
+        treeList.add(top);
+        return treeList;
+    }
 
-	private void makeTree(Level mainLevel, List<LevelTreeDto> listTree) {
-		List<Level> childrens = levelRepository.findByParentId(
-				mainLevel.getChild().getId()
-				);
-		listTree.add(
-				new LevelTreeDto(
-						mainLevel.getChild(), childrens.stream().map(p -> p.getChild()).collect(Collectors.toList())
-						)
-				);
-		for (Level level : childrens) {
-			makeTree(level, listTree);
-		}
-	}
-	
+    private void makeTree(Level selfNode, LevelTreeDto listTree) {
+        final List<Level> children = levelRepository.findByParentId(selfNode.getChild().getId());
+        final LevelTreeDto node = new LevelTreeDto(selfNode.getChild().treeInfo(), new ArrayList<>());
+        listTree.getChildren().add(node);
+        for (Level level : children) {
+            makeTree(level, node);
+        }
+    }
+
 }
