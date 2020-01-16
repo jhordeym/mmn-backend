@@ -11,13 +11,17 @@ import org.springframework.context.annotation.Import;
 @Slf4j
 @Import(MailConfiguration.class)
 @Configuration
-public class SorConfig {
+public class ReservationConfig {
     @Autowired
-    private SorProperties properties;
+    private SorProperties sorProperties;
+
+    @Autowired
+    private IDecideProperties iDecideProperties;
 
     @Bean
     public void init() {
-        log.info(properties.getSOR_URL());
+        log.info(sorProperties.getSOR_URL());
+        log.info(iDecideProperties.getUrl());
     }
 
     @Bean

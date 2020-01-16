@@ -2,10 +2,8 @@ package com.mmn.account.controller;
 
 import com.mmn.account.model.dto.*;
 import com.mmn.account.model.entity.Account;
-import com.mmn.account.model.entity.IDecideAccount;
 import com.mmn.account.model.type.AccountStatus;
 import com.mmn.account.model.type.RoleEnum;
-import com.mmn.account.repository.IDecideAccountRepository;
 import com.mmn.account.service.AccountService;
 import com.mmn.account.service.LevelService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,6 @@ public class AccountController {
 
     private final AccountService accountService;
     private final LevelService levelService;
-    private final IDecideAccountRepository iDecideAccountRepository;
 
     /**
      * Account login
@@ -72,11 +69,6 @@ public class AccountController {
         final Account savedAccount = accountService.save(account);
         log.debug("Account saved successfully");
         return savedAccount;
-    }
-
-    @PostMapping("/idecide-account")
-    public IDecideAccount saveIDecide(@RequestBody final IDecideAccount iDecideAccount) {
-        return this.iDecideAccountRepository.save(iDecideAccount);
     }
 
     /**

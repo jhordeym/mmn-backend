@@ -1,4 +1,4 @@
-package com.mmn.account.model.entity;
+package com.mmn.reservation.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
