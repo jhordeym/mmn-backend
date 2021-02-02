@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -57,9 +56,9 @@ public class SorController {
 
     @PostMapping("/create")
     public ResponseEntity<?> passportUserCreate(
-            @RequestBody final PassportUser passportUser) {
+            @RequestBody final List<PassportUser> passportUser) {
         final SorProperties.Pack pack = getPackBySubscriptionId("3");
-        if (Objects.nonNull(passportUserService.save(pack, passportUser))) {
+        if (!passportUserService.saveList(pack, passportUser).isEmpty()) {
             return ResponseEntity.ok(NewUserDataSetResponseDto
                     .builder()
                     .HTTPStatus("200 OK")

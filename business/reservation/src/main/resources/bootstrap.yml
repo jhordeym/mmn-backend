@@ -13,3 +13,5 @@ spring:
       password: ${MMN_CORE_CONFIG_PASSWORD:Password1234}
 
 reservation.sor_url: "${SOR_URL}"
+
+reservation.email.temporary.enabled: "${SOR_SEND_TEMP_EMAIL}"

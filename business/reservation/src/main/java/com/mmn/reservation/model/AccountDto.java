@@ -30,4 +30,6 @@ public class AccountDto {
     private String UserAccountTypeId;
     @JsonProperty("ReferringUserId")
     private String ReferringUserId;
+    @JsonProperty("OtherID")
+    private String OtherID;
 }

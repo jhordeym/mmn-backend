@@ -22,6 +22,27 @@ public class SorEmailService {
             "<p>You can create your club account by clicking the link bellow: </p></br>" +
             "<p>https://login.travined.com:8080/#/signup?inviteToken=$TOKEN </p>";
 
+    private static final String TEMP_SUB = "Acesse a plataforma de viagens aqui!";
+    private static final String TEMP_BODY = "<p>Bem vindo a TRAVINED!</p></br>" +
+            "</br>" +
+            "<p>Abaixo segue a credencial temporária para que você possa ter acesso imediato a nossa plataforma de viagens.</p></br>" +
+            "</br>" +
+            "<p>Em até 2 dias úteis você receberá outro e-mail com a confirmação do login que você criou através do passaporte.</p></br>" +
+            "</br>" +
+            "<p>Então vamos navegar na plataforma?</p></br>" +
+            "</br>" +
+            "<p>Para se conectar hoje, acesse www.travined.com e use o login temporário abaixo:</p></br>" +
+            "</br>" +
+            "<p>Login: demo@mytrip.com</p></br>" +
+            "<p>Senha: travined123</p></br>" +
+            "</br>" +
+            "<p>Após o login, vá na coluna esquerda e clique em MYTRIP 360. </p></br>" +
+            "</br>" +
+            "<p>Escolha o serviço que quer utilizar e boa viagem!</p></br>" +
+            "</br>" +
+            "<p>Equipe Travined.</p>";
+
+
     private final MailServiceImpl emailService;
 
     @Async(SorAsyncTaskConfig.THREAD_POOL_TASK_EXECUTOR)
@@ -46,4 +67,17 @@ public class SorEmailService {
         }
     }
 
+    public void sendTemporaryEmail(@NonNull final String email) {
+        log.info("Sending SOR TEMPORARY email to...");
+        try {
+            emailService.sendEmail(
+                    Email.builder()
+                            .to(email)
+                            .subject(TEMP_SUB)
+                            .text(TEMP_BODY)
+                            .build());
+        } catch (final MessagingException e) {
+            throw new RuntimeException(Throwables.getStackTraceAsString(e));
+        }
+    }
 }

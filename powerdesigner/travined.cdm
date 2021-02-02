@@ -45,13 +45,13 @@ DttpFullName=Yes
 RlshAsstTmpl=Each %Entity1.Name%[CRLF].if %Entity1ToEntity2RoleMandatory%[CRLF] must[CRLF].else[CRLF] may[CRLF].endif[CRLF].if %Entity1ToEntity2Role%[CRLF] %.L:Entity1ToEntity2Role%[CRLF].else[CRLF] have[CRLF].endif[CRLF].if %Entity1ToEntity2RoleMaximumCardinality%==1[CRLF].if %Entity1ToEntity2RoleMandatory%[CRLF] one and only one[CRLF].else[CRLF] at most one[CRLF].endif[CRLF].else[CRLF] one or more[CRLF].endif[CRLF].if %Entity1%==%Entity2%[CRLF] other[CRLF].endif[CRLF] %Entity2.Name%.[CRLF]Each %Entity2.Name%[CRLF].if %Entity2ToEntity1RoleMandatory%[CRLF] must[CRLF].else[CRLF] may[CRLF].endif[CRLF].if %Entity2ToEntity1Role%[CRLF] %.L:Entity2ToEntity1Role%[CRLF].else[CRLF] have[CRLF].endif[CRLF].if %Entity2ToEntity1RoleMaximumCardinality%==1[CRLF].if %Entity2ToEntity1RoleMandatory%[CRLF] one and only one[CRLF].else[CRLF] at most one[CRLF].endif[CRLF].else[CRLF] one or more[CRLF].endif[CRLF].if %Entity1%==%Entity2%[CRLF] other[CRLF].endif[CRLF] %Entity1.Name%.
 RlshAsstExt=
 
-[ModelOptions\Conceptual options\NamingOptionsTemplates]
+[ModelOptions\Conceptual options</br>amingOptionsTemplates]
 
 [ModelOptions\Conceptual options\ClssNamingOptions]
 
 [ModelOptions\Conceptual options\ClssNamingOptions\FILO]
 
-[ModelOptions\Conceptual options\ClssNamingOptions\FILO\Name]
+[ModelOptions\Conceptual options\ClssNamingOptions\FILO</br>ame]
 Template=
 MaxLen=254
 Case=M
@@ -79,7 +79,7 @@ ConvTablePath=%_HOME%\Resource Files\Conversion Tables
 
 [ModelOptions\Conceptual options\ClssNamingOptions\FRMEOBJ]
 
-[ModelOptions\Conceptual options\ClssNamingOptions\FRMEOBJ\Name]
+[ModelOptions\Conceptual options\ClssNamingOptions\FRMEOBJ</br>ame]
 Template=
 MaxLen=254
 Case=M
@@ -107,7 +107,7 @@ ConvTablePath=%_HOME%\Resource Files\Conversion Tables
 
 [ModelOptions\Conceptual options\ClssNamingOptions\FRMELNK]
 
-[ModelOptions\Conceptual options\ClssNamingOptions\FRMELNK\Name]
+[ModelOptions\Conceptual options\ClssNamingOptions\FRMELNK</br>ame]
 Template=
 MaxLen=254
 Case=M
@@ -135,7 +135,7 @@ ConvTablePath=%_HOME%\Resource Files\Conversion Tables
 
 [ModelOptions\Conceptual options\ClssNamingOptions\DefaultClass]
 
-[ModelOptions\Conceptual options\ClssNamingOptions\DefaultClass\Name]
+[ModelOptions\Conceptual options\ClssNamingOptions\DefaultClass</br>ame]
 Template=
 MaxLen=254
 Case=M
@@ -163,7 +163,7 @@ ConvTablePath=%_HOME%\Resource Files\Conversion Tables
 
 [ModelOptions\Conceptual options\ClssNamingOptions\CDMPCKG]
 
-[ModelOptions\Conceptual options\ClssNamingOptions\CDMPCKG\Name]
+[ModelOptions\Conceptual options\ClssNamingOptions\CDMPCKG</br>ame]
 Template=
 MaxLen=254
 Case=M
@@ -191,7 +191,7 @@ ConvTablePath=%_HOME%\Resource Files\Conversion Tables
 
 [ModelOptions\Conceptual options\ClssNamingOptions\CDMDOMN]
 
-[ModelOptions\Conceptual options\ClssNamingOptions\CDMDOMN\Name]
+[ModelOptions\Conceptual options\ClssNamingOptions\CDMDOMN</br>ame]
 Template=
 MaxLen=254
 Case=M
@@ -219,7 +219,7 @@ ConvTablePath=%_HOME%\Resource Files\Conversion Tables
 
 [ModelOptions\Conceptual options\ClssNamingOptions\INFO]
 
-[ModelOptions\Conceptual options\ClssNamingOptions\INFO\Name]
+[ModelOptions\Conceptual options\ClssNamingOptions\INFO</br>ame]
 Template=
 MaxLen=254
 Case=M
@@ -247,7 +247,7 @@ ConvTablePath=%_HOME%\Resource Files\Conversion Tables
 
 [ModelOptions\Conceptual options\ClssNamingOptions\ENTT]
 
-[ModelOptions\Conceptual options\ClssNamingOptions\ENTT\Name]
+[ModelOptions\Conceptual options\ClssNamingOptions\ENTT</br>ame]
 Template=
 MaxLen=254
 Case=M
@@ -275,7 +275,7 @@ ConvTablePath=%_HOME%\Resource Files\Conversion Tables
 
 [ModelOptions\Conceptual options\ClssNamingOptions\IDTF]
 
-[ModelOptions\Conceptual options\ClssNamingOptions\IDTF\Name]
+[ModelOptions\Conceptual options\ClssNamingOptions\IDTF</br>ame]
 Template=
 MaxLen=254
 Case=M
@@ -303,7 +303,7 @@ ConvTablePath=%_HOME%\Resource Files\Conversion Tables
 
 [ModelOptions\Conceptual options\ClssNamingOptions\RLSH]
 
-[ModelOptions\Conceptual options\ClssNamingOptions\RLSH\Name]
+[ModelOptions\Conceptual options\ClssNamingOptions\RLSH</br>ame]
 Template=
 MaxLen=254
 Case=M
@@ -331,7 +331,7 @@ ConvTablePath=%_HOME%\Resource Files\Conversion Tables
 
 [ModelOptions\Conceptual options\ClssNamingOptions\ASSC]
 
-[ModelOptions\Conceptual options\ClssNamingOptions\ASSC\Name]
+[ModelOptions\Conceptual options\ClssNamingOptions\ASSC</br>ame]
 Template=
 MaxLen=254
 Case=M
@@ -359,7 +359,7 @@ ConvTablePath=%_HOME%\Resource Files\Conversion Tables
 
 [ModelOptions\Conceptual options\ClssNamingOptions\CDMINHR]
 
-[ModelOptions\Conceptual options\ClssNamingOptions\CDMINHR\Name]
+[ModelOptions\Conceptual options\ClssNamingOptions\CDMINHR</br>ame]
 Template=
 MaxLen=254
 Case=M
@@ -486,7 +486,7 @@ Entity.Identifiers=Yes
 Entity.Identifiers._Columns=Stereotype IdentifierIndicator
 Entity.Comment=No
 Entity.IconPicture=No
-Entity_SymbolLayout=&lt;Form&gt;[CRLF] &lt;StandardAttribute Name=&quot;Stereotype&quot; Attribute=&quot;Stereotype&quot; Prefix=&quot;&amp;lt;&amp;lt;&quot; Suffix=&quot;&amp;gt;&amp;gt;&quot; Alignment=&quot;CNTR&quot; Caption=&quot;&quot; Mandatory=&quot;No&quot; /&gt;[CRLF] &lt;StandardAttribute Name=&quot;Name&quot; Attribute=&quot;DisplayName&quot; Prefix=&quot;&quot; Suffix=&quot;&quot; Alignment=&quot;CNTR&quot; Caption=&quot;&quot; Mandatory=&quot;Yes&quot; /&gt;[CRLF] &lt;Separator Name=&quot;Separator&quot; /&gt;[CRLF] &lt;StandardCollection Name=&quot;Attributes&quot; Collection=&quot;Attributes&quot; Columns=&quot;Stereotype No\r\nDisplayName Yes\r\nIdentifierIndicator No &amp;quot;Identifier indicators&amp;quot;\r\nDataType No\r\nDomainOrDataType No &amp;quot;Domain or Data type&amp;quot;\r\nDomain No\r\nNullIndicator No Mandatory&quot; Filters=&quot;&amp;quot;All attributes&amp;quot;  CDMPENTALL &amp;quot;&amp;quot;\r\n&amp;quot;Primary attributes&amp;quot;  CDMPENTPK &amp;quot;PIDTF \&amp;quot;TRUE\&amp;quot; TRUE&amp;quot;\r\n&amp;quot;Identifying attributes&amp;quot;  CDMPENTIDTF &amp;quot;AIDF \&amp;quot;TRUE\&amp;quot; TRUE&amp;quot;&quot; HasLimit=&quot;Yes&quot; Caption=&quot;&quot; Mandatory=&quot;No&quot; /&gt;[CRLF] &lt;StandardCollection Name=&quot;Identifiers&quot; Collection=&quot;Identifiers&quot; Columns=&quot;Stereotype No\r\nDisplayName Yes\r\nIdentifierIndicator No &amp;quot;Identifier indicators&amp;quot;&quot; HasLimit=&quot;No&quot; Caption=&quot;&quot; Mandatory=&quot;No&quot; /&gt;[CRLF] &lt;StandardAttribute Name=&quot;Comment&quot; Attribute=&quot;Comment&quot; Prefix=&quot;&quot; Suffix=&quot;&quot; Alignment=&quot;LEFT&quot; Caption=&quot;&quot; Mandatory=&quot;No&quot; /&gt;[CRLF] &lt;StandardAttribute Name=&quot;Icon&quot; Attribute=&quot;IconPicture&quot; Prefix=&quot;&quot; Suffix=&quot;&quot; Alignment=&quot;CNTR&quot; Caption=&quot;&quot; Mandatory=&quot;Yes&quot; /&gt;[CRLF]&lt;/Form&gt;
+Entity_SymbolLayout=&lt;Form&gt;[CRLF] &lt;StandardAttribute Name=&quot;Stereotype&quot; Attribute=&quot;Stereotype&quot; Prefix=&quot;&amp;lt;&amp;lt;&quot; Suffix=&quot;&amp;gt;&amp;gt;&quot; Alignment=&quot;CNTR&quot; Caption=&quot;&quot; Mandatory=&quot;No&quot; /&gt;[CRLF] &lt;StandardAttribute Name=&quot;Name&quot; Attribute=&quot;DisplayName&quot; Prefix=&quot;&quot; Suffix=&quot;&quot; Alignment=&quot;CNTR&quot; Caption=&quot;&quot; Mandatory=&quot;Yes&quot; /&gt;[CRLF] &lt;Separator Name=&quot;Separator&quot; /&gt;[CRLF] &lt;StandardCollection Name=&quot;Attributes&quot; Collection=&quot;Attributes&quot; Columns=&quot;Stereotype No\r</br>DisplayName Yes\r</br>IdentifierIndicator No &amp;quot;Identifier indicators&amp;quot;\r</br>DataType No\r</br>DomainOrDataType No &amp;quot;Domain or Data type&amp;quot;\r</br>Domain No\r</br>NullIndicator No Mandatory&quot; Filters=&quot;&amp;quot;All attributes&amp;quot;  CDMPENTALL &amp;quot;&amp;quot;\r</br>&amp;quot;Primary attributes&amp;quot;  CDMPENTPK &amp;quot;PIDTF \&amp;quot;TRUE\&amp;quot; TRUE&amp;quot;\r</br>&amp;quot;Identifying attributes&amp;quot;  CDMPENTIDTF &amp;quot;AIDF \&amp;quot;TRUE\&amp;quot; TRUE&amp;quot;&quot; HasLimit=&quot;Yes&quot; Caption=&quot;&quot; Mandatory=&quot;No&quot; /&gt;[CRLF] &lt;StandardCollection Name=&quot;Identifiers&quot; Collection=&quot;Identifiers&quot; Columns=&quot;Stereotype No\r</br>DisplayName Yes\r</br>IdentifierIndicator No &amp;quot;Identifier indicators&amp;quot;&quot; HasLimit=&quot;No&quot; Caption=&quot;&quot; Mandatory=&quot;No&quot; /&gt;[CRLF] &lt;StandardAttribute Name=&quot;Comment&quot; Attribute=&quot;Comment&quot; Prefix=&quot;&quot; Suffix=&quot;&quot; Alignment=&quot;LEFT&quot; Caption=&quot;&quot; Mandatory=&quot;No&quot; /&gt;[CRLF] &lt;StandardAttribute Name=&quot;Icon&quot; Attribute=&quot;IconPicture&quot; Prefix=&quot;&quot; Suffix=&quot;&quot; Alignment=&quot;CNTR&quot; Caption=&quot;&quot; Mandatory=&quot;Yes&quot; /&gt;[CRLF]&lt;/Form&gt;
 Relationship.Entity1ToEntity2Role=Yes
 Relationship.Entity2ToEntity1RoleCardinality=No
 Relationship.Entity1ToEntity2RoleDominant=Yes
@@ -502,7 +502,7 @@ Association.Attributes=Yes
 Association.Attributes._Columns=Stereotype DataType NullIndicator
 Association.Attributes._Limit=-5
 Association.IconPicture=No
-Association_SymbolLayout=&lt;Form&gt;[CRLF] &lt;StandardAttribute Name=&quot;Stereotype&quot; Attribute=&quot;Stereotype&quot; Prefix=&quot;&amp;lt;&amp;lt;&quot; Suffix=&quot;&amp;gt;&amp;gt;&quot; Alignment=&quot;CNTR&quot; Caption=&quot;&quot; Mandatory=&quot;No&quot; /&gt;[CRLF] &lt;StandardAttribute Name=&quot;Name&quot; Attribute=&quot;DisplayName&quot; Prefix=&quot;&quot; Suffix=&quot;&quot; Alignment=&quot;CNTR&quot; Caption=&quot;&quot; Mandatory=&quot;Yes&quot; /&gt;[CRLF] &lt;Separator Name=&quot;Separator&quot; /&gt;[CRLF] &lt;StandardAttribute Name=&quot;Comment&quot; Attribute=&quot;Comment&quot; Prefix=&quot;&quot; Suffix=&quot;&quot; Alignment=&quot;LEFT&quot; Caption=&quot;&quot; Mandatory=&quot;No&quot; /&gt;[CRLF] &lt;StandardCollection Name=&quot;Attributes&quot; Collection=&quot;Attributes&quot; Columns=&quot;Stereotype No\r\nDisplayName Yes\r\nDataType No\r\nDomainOrDataType No &amp;quot;Domain or Data type&amp;quot;\r\nDomain No\r\nNullIndicator No Mandatory&quot; HasLimit=&quot;Yes&quot; Caption=&quot;&quot; Mandatory=&quot;No&quot; /&gt;[CRLF] &lt;StandardAttribute Name=&quot;Icon&quot; Attribute=&quot;IconPicture&quot; Prefix=&quot;&quot; Suffix=&quot;&quot; Alignment=&quot;CNTR&quot; Caption=&quot;&quot; Mandatory=&quot;Yes&quot; /&gt;[CRLF]&lt;/Form&gt;
+Association_SymbolLayout=&lt;Form&gt;[CRLF] &lt;StandardAttribute Name=&quot;Stereotype&quot; Attribute=&quot;Stereotype&quot; Prefix=&quot;&amp;lt;&amp;lt;&quot; Suffix=&quot;&amp;gt;&amp;gt;&quot; Alignment=&quot;CNTR&quot; Caption=&quot;&quot; Mandatory=&quot;No&quot; /&gt;[CRLF] &lt;StandardAttribute Name=&quot;Name&quot; Attribute=&quot;DisplayName&quot; Prefix=&quot;&quot; Suffix=&quot;&quot; Alignment=&quot;CNTR&quot; Caption=&quot;&quot; Mandatory=&quot;Yes&quot; /&gt;[CRLF] &lt;Separator Name=&quot;Separator&quot; /&gt;[CRLF] &lt;StandardAttribute Name=&quot;Comment&quot; Attribute=&quot;Comment&quot; Prefix=&quot;&quot; Suffix=&quot;&quot; Alignment=&quot;LEFT&quot; Caption=&quot;&quot; Mandatory=&quot;No&quot; /&gt;[CRLF] &lt;StandardCollection Name=&quot;Attributes&quot; Collection=&quot;Attributes&quot; Columns=&quot;Stereotype No\r</br>DisplayName Yes\r</br>DataType No\r</br>DomainOrDataType No &amp;quot;Domain or Data type&amp;quot;\r</br>Domain No\r</br>NullIndicator No Mandatory&quot; HasLimit=&quot;Yes&quot; Caption=&quot;&quot; Mandatory=&quot;No&quot; /&gt;[CRLF] &lt;StandardAttribute Name=&quot;Icon&quot; Attribute=&quot;IconPicture&quot; Prefix=&quot;&quot; Suffix=&quot;&quot; Alignment=&quot;CNTR&quot; Caption=&quot;&quot; Mandatory=&quot;Yes&quot; /&gt;[CRLF]&lt;/Form&gt;
 AssociationLink.SymbolCardinality=Yes
 AssociationLink.Stereotype=Yes
 AssociationLink.Role=Yes

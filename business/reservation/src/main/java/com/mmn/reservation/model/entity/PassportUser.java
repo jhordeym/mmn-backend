@@ -44,20 +44,22 @@ public class PassportUser {
     private String ContractNumber;
     @JsonProperty("Fax")
     private String Fax;
-    @JsonProperty("FirstName")
+    @JsonProperty("First Name")
     private String FirstName;
     @JsonProperty("Gender")
     private String Gender;
-    @JsonProperty("LastName")
+    @JsonProperty("Last Name")
     private String LastName;
     @JsonProperty("Marital Status")
     private String MaritalStatus;
     @JsonProperty("Middle Name")
     private String MiddleName;
-    @JsonProperty("")
+    @JsonProperty("Nationality")
     private String Nationality;
     @JsonProperty("Passport Number")
     private String PassportNumber;
+    @JsonProperty("Phone")
+    private String Phone;
     @JsonProperty("Platform Name")
     private String PlatformName;
     @JsonProperty("Referring Contract Number")
@@ -76,5 +78,4 @@ public class PassportUser {
     private String Title;
     @JsonProperty("Zip or Postal Code")
     private String ZipOrPostalCode;
-
 }
